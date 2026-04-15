@@ -1,0 +1,47 @@
+{
+  "name": "deeptalk",
+  "version": "1.0.0",
+  "description": "基于大模型的专业公众号文章生成系统，支持 Markdown 转 HTML 和预览",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/**/*.ts",
+    "generate": "ts-node src/index.ts generate",
+    "md2html": "ts-node src/index.ts md2html",
+    "wechat": "ts-node src/index.ts wechat",
+    "publish": "ts-node src/index.ts publish",
+    "drafts": "ts-node src/index.ts drafts",
+    "preview-md": "ts-node src/index.ts preview-md",
+    "preview-html": "ts-node src/index.ts preview-html",
+    "preview": "ts-node src/index.ts preview",
+    "web": "ts-node src/index.ts web"
+  },
+  "keywords": [
+    "article",
+    "generator",
+    "ai",
+    "wechat",
+    "markdown",
+    "html"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/marked": "^6.0.0",
+    "@types/node": "^25.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "axios": "^1.15.0",
+    "commander": "^14.0.3",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "juice": "^11.1.1",
+    "marked": "^4.3.0",
+    "openai": "^6.34.0"
+  }
+}
