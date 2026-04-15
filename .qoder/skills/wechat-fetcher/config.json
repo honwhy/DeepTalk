@@ -1,0 +1,30 @@
+{
+  "name": "wechat-fetcher",
+  "version": "1.0.0",
+  "description": "抓取微信公众号文章并转换为 Markdown 格式",
+  "author": "DeepTalk",
+  "type": "tool",
+  "entry": {
+    "cli": "npm run fetch-wechat",
+    "web": "/editor",
+    "module": "src/utils/fetcher.ts"
+  },
+  "commands": [
+    {
+      "name": "fetch-wechat",
+      "description": "抓取微信公众号文章",
+      "usage": "npm run fetch-wechat -- -u <url> [-o <dir>] [--html]"
+    }
+  ],
+  "api": {
+    "endpoints": [
+      {
+        "method": "POST",
+        "path": "/api/fetch-wechat",
+        "description": "抓取微信公众号文章"
+      }
+    ]
+  },
+  "tags": ["wechat", "fetch", "markdown", "article"],
+  "dependencies": []
+}

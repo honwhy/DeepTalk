@@ -13,6 +13,7 @@
     "wechat": "ts-node src/index.ts wechat",
     "publish": "ts-node src/index.ts publish",
     "drafts": "ts-node src/index.ts drafts",
+    "fetch-wechat": "ts-node src/index.ts fetch-wechat",
     "preview-md": "ts-node src/index.ts preview-md",
     "preview-html": "ts-node src/index.ts preview-html",
     "preview": "ts-node src/index.ts preview",

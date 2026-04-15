@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { generateHtml, Theme, WeChatTheme } from '../skills';
 import { renderForWeChatCopy } from '../skills/wechatRenderer';
+import { fetchWeChatArticle, extractArticleTitle, extractArticleContent, extractAuthor, extractPublishDate } from '../utils';
 
 const OUTPUT_DIR = path.resolve(__dirname, '../../output');
 const CONTENTS_DIR = path.resolve(__dirname, '../../contents');
@@ -255,6 +256,83 @@ app.delete('/api/markdowns/:id', (req: Request, res: Response) => {
     res.json({ success: true, message: '文件已删除' });
   } catch (error) {
     res.status(500).json({ error: '删除文件失败', details: String(error) });
+  }
+});
+
+// API 路由 - 抓取微信公众号文章
+app.post('/api/fetch-wechat', async (req: Request, res: Response) => {
+  const { url, save = true } = req.body;
+
+  if (!url) {
+    res.status(400).json({ error: '缺少文章URL' });
+    return;
+  }
+
+  if (!url.includes('mp.weixin.qq.com')) {
+    res.status(400).json({ error: '仅支持微信公众号文章URL (mp.weixin.qq.com)' });
+    return;
+  }
+
+  try {
+    console.log(`[Web] 正在抓取文章: ${url}`);
+    const htmlContent = await fetchWeChatArticle(url);
+
+    // 提取信息
+    const title = extractArticleTitle(htmlContent);
+    const content = extractArticleContent(htmlContent);
+    const author = extractAuthor(htmlContent);
+    const publishDate = extractPublishDate(htmlContent);
+
+    if (!title || !content) {
+      res.status(400).json({ error: '无法提取文章标题或内容，文章可能已被删除或需要登录' });
+      return;
+    }
+
+    // 生成Markdown内容
+    const mdContent = `# ${title}
+
+> 原文链接: ${url}
+> ${author ? `作者: ${author}` : ''}${author && publishDate ? ' | ' : ''}${publishDate ? `发布时间: ${publishDate.toLocaleDateString('zh-CN')}` : ''}
+
+---
+
+${content}
+`;
+
+    let savedFile = null;
+
+    // 保存到markdowns目录
+    if (save) {
+      if (!fs.existsSync(MARKDOWNS_DIR)) {
+        fs.mkdirSync(MARKDOWNS_DIR, { recursive: true });
+      }
+
+      const safeTitle = title.substring(0, 30).replace(/[\\/:*?"<>|]/g, '');
+      const timestamp = publishDate
+        ? publishDate.toISOString().split('T')[0]
+        : new Date().toISOString().split('T')[0];
+      const filename = `${timestamp}_${safeTitle}.md`;
+      const filepath = path.join(MARKDOWNS_DIR, filename);
+
+      fs.writeFileSync(filepath, mdContent, 'utf-8');
+      savedFile = filename;
+      console.log(`[Web] 文章已保存: ${filepath}`);
+    }
+
+    res.json({
+      success: true,
+      title,
+      author,
+      publishDate: publishDate?.toISOString(),
+      content: mdContent,
+      savedFile,
+    });
+  } catch (error) {
+    console.error('[Web] 抓取失败:', error);
+    res.status(500).json({
+      error: '抓取失败',
+      details: error instanceof Error ? error.message : String(error),
+    });
   }
 });
 
@@ -853,6 +931,69 @@ function getEditorHtml(): string {
     }
     .status.success { opacity: 1; color: #198754; }
     .status.error { opacity: 1; color: #dc3545; }
+    .dialog-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .dialog-overlay.show { display: flex; }
+    .dialog {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .dialog h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .dialog input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    .dialog input:focus {
+      outline: none;
+      border-color: #28a745;
+    }
+    .dialog .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .dialog button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .dialog button:hover { opacity: 0.8; }
+    .dialog button.primary {
+      background: #28a745;
+      color: white;
+    }
+    .dialog button.secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+    .dialog .hint {
+      font-size: 12px;
+      color: #666;
+      margin-top: -12px;
+      margin-bottom: 16px;
+    }
     @media (max-width: 768px) {
       .sidebar { width: 180px; }
       .toolbar input { width: 100px; }
@@ -877,6 +1018,7 @@ function getEditorHtml(): string {
     <button onclick="newFile()" class="secondary">新建</button>
     <button onclick="renderPreview()">刷新预览</button>
     <button onclick="downloadHtml()">下载 HTML</button>
+    <button onclick="showFetchDialog()" class="secondary" style="background: #28a745; color: white; border-color: #28a745;">抓取公众号文章</button>
     <span class="spacer"></span>
     <a href="/">← 返回列表</a>
   </div>
@@ -908,6 +1050,20 @@ console.log('Hello, DeepTalk!');
     </div>
   </div>
   <div class="status" id="status">就绪</div>
+
+  <!-- 抓取文章对话框 -->
+  <div class="dialog-overlay" id="fetchDialog">
+    <div class="dialog">
+      <h3>抓取微信公众号文章</h3>
+      <input type="text" id="fetchUrl" placeholder="粘贴公众号文章链接..." />
+      <div class="hint">支持 mp.weixin.qq.com 域名</div>
+      <div class="buttons">
+        <button class="secondary" onclick="closeFetchDialog()">取消</button>
+        <button class="primary" onclick="fetchArticle()" id="fetchBtn">开始抓取</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const markdownEl = document.getElementById('markdown');
     const themeEl = document.getElementById('theme');
@@ -1057,6 +1213,76 @@ console.log('Hello, DeepTalk!');
         e.preventDefault();
         saveMarkdown();
       }
+    });
+
+    // 抓取文章相关函数
+    function showFetchDialog() {
+      document.getElementById('fetchDialog').classList.add('show');
+      document.getElementById('fetchUrl').focus();
+    }
+
+    function closeFetchDialog() {
+      document.getElementById('fetchDialog').classList.remove('show');
+      document.getElementById('fetchUrl').value = '';
+    }
+
+    async function fetchArticle() {
+      const url = document.getElementById('fetchUrl').value.trim();
+      const btn = document.getElementById('fetchBtn');
+
+      if (!url) {
+        setStatus('请输入文章链接', 'error');
+        return;
+      }
+
+      if (!url.includes('mp.weixin.qq.com')) {
+        setStatus('仅支持微信公众号文章链接', 'error');
+        return;
+      }
+
+      btn.textContent = '抓取中...';
+      btn.disabled = true;
+      setStatus('正在抓取文章...');
+
+      try {
+        const response = await fetch('/api/fetch-wechat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url, save: true })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || data.details || '抓取失败');
+        }
+
+        // 加载抓取的文章到编辑器
+        markdownEl.value = data.content;
+        titleEl.value = data.title;
+        filenameEl.value = data.savedFile.replace('.md', '');
+        currentFile = data.savedFile;
+
+        closeFetchDialog();
+        renderPreview();
+        loadFileList();
+        setStatus('抓取成功: ' + data.title, 'success');
+      } catch (err) {
+        setStatus('抓取失败: ' + err.message, 'error');
+      } finally {
+        btn.textContent = '开始抓取';
+        btn.disabled = false;
+      }
+    }
+
+    // 回车键触发抓取
+    document.getElementById('fetchUrl').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') fetchArticle();
+    });
+
+    // 点击遮罩关闭对话框
+    document.getElementById('fetchDialog').addEventListener('click', (e) => {
+      if (e.target.id === 'fetchDialog') closeFetchDialog();
     });
   </script>
 </body>

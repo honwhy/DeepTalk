@@ -7,6 +7,7 @@ import { Category } from './types';
 import { generateHtml, Theme, renderForWeChat, renderForWeChatCopy, WeChatTheme } from './skills';
 import { startWebServer, startPreviewServer } from './web';
 import { WeChatAPI, ArticleDraft, WeChatAPIError } from './wechat';
+import { fetchWeChatArticle, extractArticleTitle, extractArticleContent, extractAuthor, extractPublishDate } from './utils';
 
 const OUTPUT_DIR = path.resolve(__dirname, '../output');
 const CONTENTS_DIR = path.resolve(__dirname, '../contents');
@@ -414,6 +415,84 @@ program
       console.log(`总计: ${result.total_count || 0} 篇`);
     } catch (error) {
       console.error('获取草稿列表失败:', error);
+      process.exit(1);
+    }
+  });
+
+// 抓取微信公众号文章命令
+program
+  .command('fetch-wechat')
+  .description('抓取微信公众号文章并保存为 Markdown')
+  .requiredOption('-u, --url <url>', '文章URL')
+  .option('-o, --output <dir>', '输出目录', './markdowns')
+  .option('--html', '同时保存原始HTML', false)
+  .action(async (options) => {
+    const { url, output, html: saveHtml } = options;
+
+    // 验证URL
+    if (!url.includes('mp.weixin.qq.com')) {
+      console.error('错误: 仅支持微信公众号文章URL (mp.weixin.qq.com)');
+      process.exit(1);
+    }
+
+    console.log(`正在抓取文章...`);
+    console.log(`URL: ${url}`);
+
+    try {
+      // 抓取文章
+      const htmlContent = await fetchWeChatArticle(url);
+
+      // 提取信息
+      const title = extractArticleTitle(htmlContent);
+      const content = extractArticleContent(htmlContent);
+      const author = extractAuthor(htmlContent);
+      const publishDate = extractPublishDate(htmlContent);
+
+      if (!title || !content) {
+        console.error('错误: 无法提取文章标题或内容，文章可能已被删除或需要登录');
+        process.exit(1);
+      }
+
+      console.log(`\n✅ 抓取成功！`);
+      console.log(`📰 标题: ${title}`);
+      if (author) console.log(`✍️  作者: ${author}`);
+      if (publishDate) console.log(`📅 日期: ${publishDate.toLocaleDateString('zh-CN')}`);
+
+      // 确保输出目录存在
+      ensureDir(output);
+
+      // 生成文件名
+      const safeTitle = title.substring(0, 30).replace(/[\\/:*?"<>|]/g, '');
+      const timestamp = publishDate
+        ? publishDate.toISOString().split('T')[0]
+        : new Date().toISOString().split('T')[0];
+      const filename = `${timestamp}_${safeTitle}`;
+
+      // 保存Markdown
+      const mdContent = `# ${title}
+
+> 原文链接: ${url}
+> ${author ? `作者: ${author}` : ''}${author && publishDate ? ' | ' : ''}${publishDate ? `发布时间: ${publishDate.toLocaleDateString('zh-CN')}` : ''}
+
+---
+
+${content}
+`;
+
+      const mdPath = path.join(output, `${filename}.md`);
+      fs.writeFileSync(mdPath, mdContent, 'utf-8');
+      console.log(`\n📝 Markdown 已保存: ${mdPath}`);
+
+      // 可选保存HTML
+      if (saveHtml) {
+        const htmlPath = path.join(output, `${filename}.html`);
+        fs.writeFileSync(htmlPath, htmlContent, 'utf-8');
+        console.log(`🌐 HTML 已保存: ${htmlPath}`);
+      }
+
+      console.log('\n💡 提示: 使用 --html 参数可同时保存原始HTML文件');
+    } catch (error) {
+      console.error('\n❌ 抓取失败:', error instanceof Error ? error.message : error);
       process.exit(1);
     }
   });

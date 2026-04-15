@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Article } from '../types';
 
+export * from './fetcher';
+
 const OUTPUT_DIR = path.resolve(__dirname, '../../output');
 
 export function ensureOutputDir(): void {
