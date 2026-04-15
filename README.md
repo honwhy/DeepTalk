@@ -222,6 +222,14 @@ DeepTalk/
 - [doocs/md](https://github.com/doocs/md) - 公众号 Markdown 编辑器参考
 - [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) - 设计系统参考
 
+## 支持作者
+
+如果这个项目对你有帮助，欢迎请我喝杯咖啡 ☕
+
+<p align="center">
+  <img src="public/wechat-donate.jpg" alt="微信支付" width="300">
+</p>
+
 ## License
 
 ISC
