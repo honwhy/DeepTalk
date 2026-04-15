@@ -216,6 +216,14 @@ DeepTalk/
 - Juice (CSS 内联化)
 - Axios (HTTP 客户端)
 
+## 文章示例
+
+使用 DeepTalk 生成的文章示例：
+
+| 文章 | 描述 |
+|------|------|
+| [阿里巴巴"半条命"论](https://mp.weixin.qq.com/s/kBI_ArHIVAJCRWR4tgET9g) | 看空机会是否存在？一份严谨的基本面分析 |
+
 ## 相关资源
 
 - [微信公众号开发文档](https://developers.weixin.qq.com/doc/offiaccount/)
