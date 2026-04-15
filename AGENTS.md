@@ -49,6 +49,9 @@ npm run publish -- -i article.md --title "标题"
 # List drafts
 npm run drafts
 
+# Fetch WeChat article (save as Markdown)
+npm run fetch-wechat -- -u "https://mp.weixin.qq.com/s/xxx"
+
 # === Web Interface ===
 
 # Start web UI
@@ -58,6 +61,9 @@ npm run web
 
 # Generate article (requires API key)
 npm run generate -- -t "topic" -c [tech|ai|invest]
+
+# Generate article and save to contents directory
+npm run generate -- -t "topic" -c tech --contents
 ```
 
 ## Configuration
@@ -91,10 +97,13 @@ src/
 ├── templates/         # Article structure templates
 ├── web/               # Express web server
 ├── config/            # API configuration
-└── utils/             # File utilities
+└── utils/
+    └── fetcher.ts     # WeChat article fetcher
 
 .qoder/skills/
 ├── wechat-article/    # WeChat article skill
+│   └── SKILL.md
+├── wechat-fetcher/    # WeChat article fetcher skill
 │   └── SKILL.md
 └── design-system/     # Design system
     └── DESIGN.md
@@ -114,6 +123,8 @@ Express web server providing:
 - `/api/files` - List and retrieve HTML/Markdown files from output/
 - `/api/markdowns` - CRUD operations for markdowns/ directory
 - `/api/render` - Convert Markdown to HTML preview
+- `/api/wechat/:id` - Get WeChat-compatible HTML for a file (inline CSS)
+- `/api/fetch-wechat` - Fetch WeChat article and save as Markdown
 
 **Markdown Editor Features:**
 - Sidebar file browser showing all markdown files
@@ -123,6 +134,7 @@ Express web server providing:
 - Delete files
 - Real-time HTML preview with theme switching
 - Download as HTML
+- Fetch WeChat articles directly in editor
 
 ### wechatRenderer.ts
 
@@ -145,6 +157,16 @@ WeChat Public Account API client:
 
 Standard HTML renderer with three themes.
 
+### utils/fetcher.ts
+
+WeChat article fetcher module:
+- `fetchWeChatArticle()` - fetch article HTML from WeChat
+- `extractArticleTitle()` - extract title from HTML
+- `extractArticleContent()` - extract content and convert to Markdown
+- `extractAuthor()` - extract author info
+- `extractPublishDate()` - extract publish date
+- `extractCoverImage()` - extract cover image URL
+
 ## WeChat API Notes
 
 1. IP whitelist required in WeChat backend
@@ -164,6 +186,15 @@ Defines:
 - Input parameters (content, title, theme)
 - Output format (inline CSS HTML)
 - Styling rules (fonts, colors, spacing)
+
+### wechat-fetcher Skill
+
+Located at `.qoder/skills/wechat-fetcher/SKILL.md`
+
+Defines:
+- WeChat article fetching workflow
+- Content extraction and Markdown conversion
+- Error handling and retry logic
 
 ### design-system
 

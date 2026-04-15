@@ -15,6 +15,7 @@
 - 文件自动保存到 `markdowns/` 目录
 - 支持 Ctrl+S 快捷键保存
 - 文件列表侧边栏，快速切换编辑
+- 支持直接抓取微信公众号文章到编辑器
 
 ### 2. Markdown 转 HTML
 - 命令行一键转换，支持多种主题
@@ -31,7 +32,13 @@
 - 支持封面图片上传
 - 草稿管理功能
 
-### 5. 大模型文章生成
+### 5. 微信公众号文章抓取
+- 通过 URL 抓取公众号文章
+- 自动转换为 Markdown 格式
+- 提取标题、作者、发布日期等信息
+- 支持 CLI 和 Web 界面两种方式
+
+### 6. 大模型文章生成
 - 通过 OpenAI/DeepSeek 生成专业文章
 - 支持技术、AI、投资三大领域
 
@@ -71,6 +78,19 @@ npm run publish -- -i article.md --title "文章标题"
 
 # 查看草稿列表
 npm run drafts
+```
+
+### 抓取公众号文章
+
+```bash
+# 抓取文章并保存为 Markdown
+npm run fetch-wechat -- -u "https://mp.weixin.qq.com/s/xxx"
+
+# 指定输出目录
+npm run fetch-wechat -- -u "https://mp.weixin.qq.com/s/xxx" -o ./markdowns
+
+# 同时保存原始 HTML
+npm run fetch-wechat -- -u "https://mp.weixin.qq.com/s/xxx" --html
 ```
 
 ## 命令详解
@@ -119,6 +139,15 @@ npm run drafts -- [options]
   --count <count>        数量
 ```
 
+### fetch-wechat - 抓取公众号文章
+
+```bash
+npm run fetch-wechat -- [options]
+  -u, --url <url>        文章URL (必需)
+  -o, --output <dir>     输出目录 (默认: ./markdowns)
+  --html                 同时保存原始HTML
+```
+
 ### preview-md - Markdown 预览
 
 ```bash
@@ -137,13 +166,14 @@ npm run web -- [options]
 ```
 
 **Web 界面功能：**
-- `/` - 文章列表页，展示 contents/ 目录下的所有文件
+- `/` - 文章列表页，展示 contents/ 目录下的所有文件，支持复制公众号格式
 - `/editor` - Markdown 编辑器，支持：
   - 创建、编辑、保存 Markdown 文件到 `markdowns/` 目录
   - 侧边栏文件列表，点击切换编辑
   - 实时 HTML 预览（支持主题切换）
   - Ctrl+S 快捷键保存
   - 下载为 HTML 文件
+  - 抓取微信公众号文章（直接粘贴 URL）
 
 ## 主题说明
 
@@ -198,9 +228,12 @@ DeepTalk/
 │   │   └── api.ts
 │   ├── web/               # Web 服务
 │   │   └── server.ts      # Express 服务器
+│   ├── utils/             # 工具函数
+│   │   └── fetcher.ts     # 公众号文章抓取
 │   └── ...
 ├── .qoder/skills/         # Skills 定义
 │   ├── wechat-article/
+│   ├── wechat-fetcher/
 │   └── design-system/
 ├── contents/              # HTML 内容存储
 ├── output/                # LLM 生成输出目录
