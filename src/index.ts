@@ -199,7 +199,7 @@ program
   .command('web')
   .description('启动 Web 管理界面')
   .option('-p, --port <port>', '端口号', '3000')
-  .option('-d, --dir <dir>', '内容目录', CONTENTS_DIR)
+  .option('-d, --dir <dir>', '内容目录', OUTPUT_DIR)
   .action((options) => {
     const port = parseInt(options.port, 10);
     startWebServer(port, options.dir);
