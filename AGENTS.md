@@ -100,7 +100,7 @@ src/
     └── DESIGN.md
 
 contents/              # Default content storage
-output/                # LLM output directory
+output/                # LLM output directory (article list data source)
 markdowns/             # Markdown source files (editable via /editor)
 ```
 
@@ -109,9 +109,9 @@ markdowns/             # Markdown source files (editable via /editor)
 ### web/server.ts
 
 Express web server providing:
-- `/` - Article management dashboard
+- `/` - Article management dashboard (shows files from output/)
 - `/editor` - Markdown editor with file management
-- `/api/files` - List and retrieve HTML/Markdown files from contents/
+- `/api/files` - List and retrieve HTML/Markdown files from output/
 - `/api/markdowns` - CRUD operations for markdowns/ directory
 - `/api/render` - Convert Markdown to HTML preview
 

@@ -18,10 +18,11 @@
 | title | string | 否 | 文章标题 |
 | author | string | 否 | 作者名称 |
 | theme | string | 否 | 主题：tech \| business \| claude \| minimal，默认 tech |
+| filename | string | 否 | 输出文件名（不含扩展名），默认使用标题或时间戳 |
 
 ## Output
 
-内联样式的 HTML 内容，可直接复制到公众号编辑器。
+将生成的 HTML 文件写入 `output/` 目录，文件名格式为 `{filename}.html`。
 
 ## 执行流程
 
@@ -47,9 +48,23 @@ AI 自行解析 Markdown 语法，识别以下元素：
 
 如需自动获取配图，参考 design-system 中定义的图片处理规范。
 
-### 4. 输出 HTML
+### 4. 生成文件名
 
-直接输出完整的 HTML 内容，无需用户执行额外命令。
+根据以下优先级确定输出文件名：
+1. 用户指定的 filename 参数
+2. 文章标题（转换为拼音或英文，去除特殊字符）
+3. 时间戳格式：`article-{YYYYMMDD-HHmmss}`
+
+### 5. 写入文件
+
+使用 Write 工具将生成的 HTML 内容写入 `output/{filename}.html`。
+
+**示例输出路径：**
+```
+output/my-article.html
+output/tech-tutorial-20260415.html
+output/article-20260415-143052.html
+```
 
 ## 主题系统
 
@@ -308,6 +323,7 @@ AI 在转换时必须遵循以下规则：
 5. **宽度**: 内容区域建议不超过 677px
 6. **div 标签**: 公众号不支持 `<div>` 标签，使用 `<section>` 替代
 7. **主题选择**: 根据文章内容选择合适的主题风格
+8. **文件输出**: 默认将 HTML 写入 `output/` 目录，用户可直接在 Web 界面查看
 
 ## 相关文件
 
