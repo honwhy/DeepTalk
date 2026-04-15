@@ -7,6 +7,7 @@ import { renderForWeChatCopy } from '../skills/wechatRenderer';
 const OUTPUT_DIR = path.resolve(__dirname, '../../output');
 const CONTENTS_DIR = path.resolve(__dirname, '../../contents');
 const MARKDOWNS_DIR = path.resolve(__dirname, '../../markdowns');
+const PUBLIC_DIR = path.resolve(__dirname, '../../public');
 
 interface PreviewOptions {
   mdPath?: string;
@@ -271,6 +272,7 @@ app.get('/editor', (_req: Request, res: Response) => {
 app.use('/static', express.static(OUTPUT_DIR));
 app.use('/output', express.static(OUTPUT_DIR));
 app.use('/markdowns', express.static(MARKDOWNS_DIR));
+app.use('/public', express.static(PUBLIC_DIR));
 
 export function startWebServer(port: number = 3000, contentDir: string = CONTENTS_DIR): void {
   app.listen(port, () => {
@@ -549,6 +551,7 @@ function getIndexHtml(): string {
 </head>
 <body>
   <div class="header">
+    <img src="/public/logo.svg" alt="DeepTalk" width="80" height="80" style="margin-bottom: 16px;">
     <h1>深言 DeepTalk</h1>
     <p>Markdown 转 HTML 工具 · 文章生成与预览</p>
     <div class="nav">
@@ -859,6 +862,7 @@ function getEditorHtml(): string {
 </head>
 <body>
   <div class="toolbar">
+    <img src="/public/logo.svg" alt="DeepTalk" width="28" height="28" style="margin-right: 4px;">
     <h1>Markdown 编辑器</h1>
     <label>主题
       <select id="theme">

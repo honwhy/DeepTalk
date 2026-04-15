@@ -1,6 +1,10 @@
-# DeepTalk 深言
+<p align="center">
+  <img src="public/logo.svg" alt="DeepTalk Logo" width="120" height="120">
+</p>
 
-Markdown 转 HTML 工具 + 微信公众号文章生成与发布系统
+<h1 align="center">DeepTalk 深言</h1>
+
+<p align="center">Markdown 转 HTML 工具 + 微信公众号文章生成与发布系统</p>
 
 支持与 qoder CLI、opencode、claude、codex、gemini 等 AI CLI 工具配合使用。
 
