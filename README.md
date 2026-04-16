@@ -358,7 +358,7 @@ DeepTalk/
 | 文章 | 描述 |
 |------|------|
 | [阿里巴巴"半条命"论](https://mp.weixin.qq.com/s/kBI_ArHIVAJCRWR4tgET9g) | 看空机会是否存在？一份严谨的基本面分析 |
-| [群核科技明日上市：暗盘暴涨157%只是开始？](https://mp.weixin.qq.com/s/WmkRy6tcHE2IITZVjeeOtQ) | 暗盘涨157%、市值破340亿，群核科技明天正式挂牌大概率继续冲高。|
+| [群核科技明日上市：暗盘暴涨157%只是开始？](https://mp.weixin.qq.com/s/uvByLpCeAhBmdVP50UtLvg) | 暗盘涨157%、市值破340亿，群核科技明天正式挂牌大概率继续冲高。|
 
 ## 相关资源
 
