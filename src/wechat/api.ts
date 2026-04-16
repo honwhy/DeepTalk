@@ -126,6 +126,61 @@ export class WeChatAPI {
   }
 
   /**
+   * 从 URL 获取图片并上传到微信
+   * @param imageUrl 图片链接
+   * @param filename 可选的文件名，如果不提供则从 URL 中提取
+   * @returns media_id
+   */
+  async uploadImageFromUrl(imageUrl: string, filename?: string): Promise<string> {
+    // 下载图片
+    const response = await axios.get(imageUrl, {
+      responseType: 'arraybuffer',
+      timeout: 30000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+    });
+
+    const imageBuffer = Buffer.from(response.data);
+
+    // 如果没有提供文件名，尝试从 URL 中提取
+    if (!filename) {
+      try {
+        const url = new URL(imageUrl);
+        const pathname = url.pathname;
+        filename = pathname.split('/').pop() || 'image.jpg';
+        // 确保有扩展名
+        if (!filename.includes('.')) {
+          filename += '.jpg';
+        }
+      } catch {
+        filename = 'image.jpg';
+      }
+    }
+
+    // 根据 Content-Type 调整文件扩展名
+    const contentType = response.headers['content-type'];
+    if (contentType) {
+      const extMap: Record<string, string> = {
+        'image/jpeg': '.jpg',
+        'image/jpg': '.jpg',
+        'image/png': '.png',
+        'image/gif': '.gif',
+        'image/webp': '.webp',
+        'image/bmp': '.bmp',
+      };
+
+      const ext = extMap[contentType];
+      if (ext && !filename.toLowerCase().endsWith(ext)) {
+        // 移除现有扩展名并添加正确的扩展名
+        filename = filename.replace(/\.[^.]+$/, '') + ext;
+      }
+    }
+
+    return this.uploadImage(imageBuffer, filename);
+  }
+
+  /**
    * 创建草稿
    * @param article 文章内容
    * @returns media_id 草稿 ID
