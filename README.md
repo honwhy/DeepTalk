@@ -139,6 +139,24 @@ npm run drafts -- [options]
   --count <count>        数量
 ```
 
+### generate - 大模型文章生成
+
+```bash
+npm run generate -- [options]
+  -t, --topic <topic>     主题（必需）
+  -c, --category <cat>    领域：tech|ai|invest
+  --contents              保存到 contents 目录
+```
+
+**示例：**
+```bash
+# 生成技术文章
+npm run generate -- -t "React Hooks 最佳实践" -c tech
+
+# 生成 AI 领域文章并保存到 contents
+npm run generate -- -t "大模型推理优化" -c ai --contents
+```
+
 ### fetch-wechat - 抓取公众号文章
 
 ```bash
@@ -154,6 +172,14 @@ npm run fetch-wechat -- [options]
 npm run preview-md -- [options]
   -i, --input <file>     Markdown 文件路径
   -t, --theme <theme>    主题
+  -p, --port <port>      端口号
+```
+
+### preview-html - HTML 预览
+
+```bash
+npm run preview-html -- [options]
+  -i, --input <dir>      HTML 文件目录 (默认: ./contents)
   -p, --port <port>      端口号
 ```
 
@@ -175,6 +201,19 @@ npm run web -- [options]
   - 下载为 HTML 文件
   - 抓取微信公众号文章（直接粘贴 URL）
 
+## 开发命令
+
+```bash
+# 开发模式（直接运行 TypeScript）
+npm run dev -- [command]
+
+# 构建项目
+npm run build
+
+# 代码检查
+npm run lint
+```
+
 ## 主题说明
 
 | 主题 | 说明 | 适用场景 |
@@ -183,7 +222,69 @@ npm run web -- [options]
 | business | 商务风，深蓝主色调 | 商业分析、行业报告 |
 | minimal | 简约风，黑白灰配色 | 通用文章、公众号 |
 
-> **获取更多主题**：访问 [https://getdesign.md/](https://getdesign.md/) 可下载更多精美主题，将主题文件放置到 `.qoder/skills/design-system/` 目录下即可使用。
+> **获取更多主题**：访问 [https://getdesign.md/](https://getdesign.md/) 可下载更多精美主题，将主题文件放置到 `.qoder/skills/wechat-article/design-system/references/` 目录下即可使用。
+
+## Skills
+
+本项目提供 4 个 Qoder Skills，用于与 AI CLI 工具协作：
+
+### wechat-article
+
+生成符合微信公众号格式的 HTML 文章。
+
+**功能：**
+- Markdown 转 HTML（内联 CSS）
+- 智能主题选择（tech / business / claude / minimal）
+- 智能配图（Unsplash API）
+- 多种文章模板（tutorial / analysis / news / story / listicle / review）
+
+**用法示例：**
+```
+生成微信公众号文章，主题为 tech，内容如下：
+# React Hooks 入门指南
+...
+```
+
+### wechat-fetcher
+
+抓取微信公众号文章并转换为 Markdown 格式。
+
+**功能：**
+- 模拟微信客户端请求头绕过反爬
+- 自动重试机制（指数退避）
+- 提取标题、作者、发布时间
+- HTML 转 Markdown
+
+### wechat-publisher
+
+将 HTML 文章发布到微信公众号草稿箱。
+
+**功能：**
+- 自动处理封面图片上传
+- 多种封面图模式（extract / unsplash / generate / url / none）
+- 获取 media_id 并创建草稿
+
+**用法示例：**
+```
+发布以下文章到微信公众号草稿箱：
+标题：深入理解 React Hooks
+HTML：<section>...</section>
+```
+
+### humanizer-zh
+
+去除文本中的 AI 生成痕迹，使文章更自然。
+
+**功能：**
+- 检测并修复 AI 写作模式
+- 处理过度强调意义、宣传性语言、三段式法则等
+- 注入个性化表达
+
+**用法示例：**
+```
+使用 humanizer-zh 处理以下文本，去除 AI 痕迹：
+...
+```
 
 ## 环境变量
 
@@ -232,9 +333,10 @@ DeepTalk/
 │   │   └── fetcher.ts     # 公众号文章抓取
 │   └── ...
 ├── .qoder/skills/         # Skills 定义
-│   ├── wechat-article/
-│   ├── wechat-fetcher/
-│   └── design-system/
+│   ├── wechat-article/    # 公众号文章生成
+│   ├── wechat-fetcher/    # 公众号文章抓取
+│   ├── wechat-publisher/  # 公众号文章发布
+│   └── humanizer-zh/      # AI 痕迹去除
 ├── contents/              # HTML 内容存储
 ├── output/                # LLM 生成输出目录
 └── markdowns/             # Markdown 源文件目录（可通过 /editor 编辑）
@@ -256,6 +358,7 @@ DeepTalk/
 | 文章 | 描述 |
 |------|------|
 | [阿里巴巴"半条命"论](https://mp.weixin.qq.com/s/kBI_ArHIVAJCRWR4tgET9g) | 看空机会是否存在？一份严谨的基本面分析 |
+| [群核科技明日上市：暗盘暴涨157%只是开始？](https://mp.weixin.qq.com/s/WmkRy6tcHE2IITZVjeeOtQ) | 暗盘涨157%、市值破340亿，群核科技明天正式挂牌大概率继续冲高。|
 
 ## 相关资源
 
