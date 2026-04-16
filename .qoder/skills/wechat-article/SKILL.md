@@ -37,7 +37,9 @@
 
 ## 执行流程
 
-当用户请求生成微信公众号文章时，**AI 直接执行以下步骤**：
+当用户请求生成微信公众号文章时，**AI 直接执行以下步骤**（不调用外部 npm 脚本，由 AI 直接生成 HTML）：
+
+> **重要提示**: 此 Skill 定义的是 AI 的工作流程，AI 应该直接解析 Markdown 并生成内联 CSS 的 HTML，而不是调用 `npm run wechat` 等外部命令。外部命令是项目的 CLI 工具，与此 Skill 是独立的实现方式。
 
 ### 1. 智能选择主题和模板（如未指定）
 
@@ -300,6 +302,18 @@ output/my-article.html
 output/tech-tutorial-20260415.html
 output/article-20260415-143052.html
 ```
+
+### 与项目 CLI 工具的区别
+
+| 方式 | 命令/调用 | 说明 |
+|------|-----------|------|
+| **Skill 方式** | AI 直接执行 | 由 AI 解析 Markdown 并生成 HTML，使用本 Skill 定义的流程和样式 |
+| **CLI 方式** | `npm run wechat -- -i input.md` | 调用项目内置的 TypeScript 渲染器，输出到 `output/` 目录 |
+
+**选择建议：**
+- 需要 AI 智能配图、自动选择主题 → 使用 Skill 方式
+- 已有 Markdown 文件，快速转换 → 使用 CLI 方式
+- 需要自定义模板逻辑 → 使用 CLI 方式
 
 ## 主题系统
 
