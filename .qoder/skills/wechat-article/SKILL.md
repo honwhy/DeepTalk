@@ -219,14 +219,20 @@ AI 分析文章类型和内容特征，判断是否需要配图：
 4. 最大不超过 5 张
 
 #### 步骤 4：调用 Unsplash API 搜索图片
-UNSPLASH_ACCESS_KEY 需要从环境变量获取
+
+**环境变量要求：**
+- `UNSPLASH_ACCESS_KEY` 必须已设置（Unsplash Access Key）
+
+**前置检查（仅验证存在性，不输出值）：**
+```bash
+!node -e "process.env.UNSPLASH_ACCESS_KEY ? console.log('UNSPLASH_ACCESS_KEY: 已设置') : console.log('UNSPLASH_ACCESS_KEY: 未设置')"
 ```
-!echo $UNSPLASH_ACCESS_KEY
-```
+
+**API 调用：**
 ```
 GET https://api.unsplash.com/search/photos
 Headers:
-  Authorization: Client-ID {UNSPLASH_ACCESS_KEY}
+  Authorization: Client-ID $UNSPLASH_ACCESS_KEY
 Query Parameters:
   query: {AI提取的主题词}
   per_page: {配图数量}

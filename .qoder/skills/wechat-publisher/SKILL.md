@@ -53,11 +53,13 @@
 
 ### 1. 初始化 WeChat API
 
-从环境变量获取配置：
+**环境变量要求：**
+- `WECHAT_APP_ID` - 微信公众号 AppID
+- `WECHAT_APP_SECRET` - 微信公众号 AppSecret
 
+**前置检查（仅验证存在性，不输出值）：**
 ```bash
-!echo $WECHAT_APP_ID
-!echo $WECHAT_APP_SECRET
+!node -e "console.log('WECHAT_APP_ID: ' + (process.env.WECHAT_APP_ID ? '已设置' : '未设置')); console.log('WECHAT_APP_SECRET: ' + (process.env.WECHAT_APP_SECRET ? '已设置' : '未设置'))"
 ```
 
 如果环境变量未设置，提示用户配置。
