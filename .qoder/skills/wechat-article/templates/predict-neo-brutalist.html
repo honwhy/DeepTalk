@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A股与港股财报预估指南 | Neo-Brutalist</title>
+</head>
+
+<body style="margin: 0; padding: 0; background-color: #ffffff; color: #000000; font-family: 'Arial Black', 'Gadget', sans-serif;">
+
+  <section style="max-width: 800px; margin: 0 auto; padding: 24px;">
+
+    <!-- 头部 -->
+    <header style="text-align: left; padding: 48px 0; border-bottom: 4px solid #000000;">
+      <p style="font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #FF0000; margin: 0 0 16px 0;">财务预测指南</p>
+      <h1 style="font-size: 48px; font-weight: 800; line-height: 1.0; letter-spacing: -0.02em; margin: 0 0 16px 0; text-transform: uppercase;">
+        A股与港股<br>财报预估实战
+      </h1>
+      <p style="font-size: 16px; font-weight: 400; color: #000000; margin: 0; font-family: Arial, sans-serif;">
+        数据渠道详解 · 龙头股案例 · 量化模型
+      </p>
+    </header>
+
+    <!-- 核心概念 -->
+    <section style="background: #FFFF00; border: 4px solid #000000; padding: 24px; margin: 48px 0; box-shadow: 6px 6px 0 #000000;">
+      <p style="font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 12px 0;">核心逻辑</p>
+      <p style="font-size: 16px; line-height: 1.6; margin: 0; font-family: Arial, sans-serif;">
+        在财报正式公布前（通常45天内），利用<strong>替代数据</strong>、<strong>行业指标</strong>和<strong>量化模型</strong>进行自下而上或自上而下的推演。
+      </p>
+      <p style="font-size: 14px; margin: 16px 0 0 0; padding-top: 16px; border-top: 2px solid #000000; font-family: Arial, sans-serif;">
+        目标：基于领先指标逆推收入、毛利与净利，力争将误差控制在5%-20%。
+      </p>
+    </section>
+
+    <!-- 配图1 -->
+    <section style="width: 100%; border: 4px solid #000000; margin: 48px 0; box-shadow: 6px 6px 0 #FF00FF;">
+      <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="数据流向财报示意图" style="width: 100%; display: block;">
+    </section>
+    <p style="text-align: center; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin: -24px 0 48px 0;">图：从原始数据到财务预测的转化路径</p>
+
+    <!-- 第一部分 -->
+    <h2 style="font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; margin: 64px 0 24px 0; padding-left: 16px; border-left: 6px solid #FF0000;">
+      一、核心数据渠道及获取
+    </h2>
+    <p style="font-size: 16px; line-height: 1.6; font-family: Arial, sans-serif;">
+      数据渠道优先级：官方 > 行业统计 > 替代数据 > 第三方平台。
+    </p>
+
+    <h3 style="font-size: 20px; font-weight: 700; margin: 32px 0 16px 0;">1. 官方及半官方（权威性高）</h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      <li style="padding: 16px; border: 2px solid #000000; margin-bottom: 8px; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6;">
+        <strong>公告与预告：</strong>巨潮资讯网（A股）、HKEX披露易（港股）。
+      </li>
+      <li style="padding: 16px; border: 2px solid #000000; margin-bottom: 8px; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6;">
+        <strong>宏观数据：</strong>国家统计局（GDP/PMI）、海关总署（进出口）、中汽协（销量）。
+      </li>
+    </ul>
+
+    <h3 style="font-size: 20px; font-weight: 700; margin: 32px 0 16px 0;">2. 替代数据（前沿量化）</h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      <li style="padding: 16px; border: 2px solid #000000; margin-bottom: 8px; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6;">
+        <span style="display: inline-block; background: #000000; color: #FFFF00; padding: 4px 12px; font-weight: 700; font-size: 12px; text-transform: uppercase; margin-right: 8px;">卫星遥感</span>
+        Orbital Insight 追踪工厂车辆、油罐库存。
+      </li>
+      <li style="padding: 16px; border: 2px solid #000000; margin-bottom: 8px; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6;">
+        <span style="display: inline-block; background: #000000; color: #FFFF00; padding: 4px 12px; font-weight: 700; font-size: 12px; text-transform: uppercase; margin-right: 8px;">消费足迹</span>
+        美团/饿了么订单、银联支付数据。
+      </li>
+      <li style="padding: 16px; border: 2px solid #000000; margin-bottom: 8px; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6;">
+        <span style="display: inline-block; background: #000000; color: #FFFF00; padding: 4px 12px; font-weight: 700; font-size: 12px; text-transform: uppercase; margin-right: 8px;">数字流量</span>
+        QuestMobile（APP日活）、SimilarWeb（网站流量）。
+      </li>
+    </ul>
+
+    <h3 style="font-size: 20px; font-weight: 700; margin: 32px 0 16px 0;">3. 专业终端对比</h3>
+    <table style="width: 100%; border-collapse: collapse; border: 4px solid #000000;">
+      <thead>
+        <tr style="background: #000000; color: #ffffff;">
+          <th style="padding: 16px; text-align: left; font-weight: 700; text-transform: uppercase; font-size: 14px; letter-spacing: 0.1em;">平台</th>
+          <th style="padding: 16px; text-align: left; font-weight: 700; text-transform: uppercase; font-size: 14px; letter-spacing: 0.1em;">覆盖</th>
+          <th style="padding: 16px; text-align: left; font-weight: 700; text-transform: uppercase; font-size: 14px; letter-spacing: 0.1em;">核心功能</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background: #ffffff; border-bottom: 2px solid #000000;">
+          <td style="padding: 16px; font-family: Arial, sans-serif;"><strong>Wind终端</strong></td>
+          <td style="padding: 16px; font-family: Arial, sans-serif;">A/H全覆盖</td>
+          <td style="padding: 16px; font-family: Arial, sans-serif;">行业月报、供应链图谱</td>
+        </tr>
+        <tr style="background: #f5f5f5; border-bottom: 2px solid #000000;">
+          <td style="padding: 16px; font-family: Arial, sans-serif;"><strong>Bloomberg</strong></td>
+          <td style="padding: 16px; font-family: Arial, sans-serif;">全球市场</td>
+          <td style="padding: 16px; font-family: Arial, sans-serif;">实时替代数据、宏观模型</td>
+        </tr>
+        <tr style="background: #ffffff;">
+          <td style="padding: 16px; font-family: Arial, sans-serif;"><strong>Choice</strong></td>
+          <td style="padding: 16px; font-family: Arial, sans-serif;">A股为主</td>
+          <td style="padding: 16px; font-family: Arial, sans-serif;">业绩预告库、机构持仓</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 第二部分 -->
+    <h2 style="font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; margin: 64px 0 24px 0; padding-left: 16px; border-left: 6px solid #0066FF;">
+      二、板块实战与龙头案例
+    </h2>
+    <p style="font-size: 16px; line-height: 1.6; font-family: Arial, sans-serif;">
+      选取高Beta板块，通过具体案例展示如何建立预测模型。
+    </p>
+
+    <!-- 配图2 -->
+    <section style="width: 100%; border: 4px solid #000000; margin: 48px 0; box-shadow: 6px 6px 0 #00FF00;">
+      <img src="https://images.unsplash.com/photo-1691643158804-d3f02eb456a3?q=80&w=1674&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="行业板块分析图" style="width: 100%; display: block;">
+    </section>
+
+    <h3 style="font-size: 20px; font-weight: 700; margin: 32px 0 16px 0;">1. 消费板块（白酒/家电）</h3>
+    <p style="font-size: 16px; line-height: 1.6; font-family: Arial, sans-serif; padding: 16px; background: #f5f5f5; border-left: 4px solid #000000;">
+      <strong>逻辑：</strong> 动销（销量）× 批发价 → 收入
+    </p>
+    <ul style="list-style: none; padding: 0; margin: 16px 0;">
+      <li style="padding: 12px 0; border-bottom: 2px solid #000000; font-family: Arial, sans-serif; font-size: 16px;">
+        <strong>贵州茅台/五粮液：</strong>关注<strong>华创/国金证券</strong>的月度渠道调研（批发动销），以及美团"高端宴席订单"数据。
+      </li>
+      <li style="padding: 12px 0; font-family: Arial, sans-serif; font-size: 16px;">
+        <strong>美的集团/格力电器：</strong>追踪<strong>奥维云网</strong>的空调/冰箱零售监测数据及海关出口数据。
+      </li>
+    </ul>
+
+    <h3 style="font-size: 20px; font-weight: 700; margin: 32px 0 16px 0;">2. 科技/互联网（用户驱动）</h3>
+    <p style="font-size: 16px; line-height: 1.6; font-family: Arial, sans-serif; padding: 16px; background: #f5f5f5; border-left: 4px solid #000000;">
+      <strong>逻辑：</strong> MAU/DAU × ARPU（每用户平均收入）
+    </p>
+    <ul style="list-style: none; padding: 0; margin: 16px 0;">
+      <li style="padding: 12px 0; border-bottom: 2px solid #000000; font-family: Arial, sans-serif; font-size: 16px;">
+        <strong>腾讯控股/美团：</strong>利用<strong>QuestMobile</strong>查看APP日活/月活，结合银联支付流水预估GMV。
+      </li>
+      <li style="padding: 12px 0; font-family: Arial, sans-serif; font-size: 16px;">
+        <strong>中芯国际：</strong>通过国家电网数据看工厂耗电量，结合卫星图像预估晶圆投片量。
+      </li>
+    </ul>
+
+    <h3 style="font-size: 20px; font-weight: 700; margin: 32px 0 16px 0;">3. 新能源与周期（量价模型）</h3>
+    <p style="font-size: 16px; line-height: 1.6; font-family: Arial, sans-serif; padding: 16px; background: #f5f5f5; border-left: 4px solid #000000;">
+      <strong>逻辑：</strong> 产量 × (市场价格 - 成本)
+    </p>
+    <ul style="list-style: none; padding: 0; margin: 16px 0;">
+      <li style="padding: 12px 0; border-bottom: 2px solid #000000; font-family: Arial, sans-serif; font-size: 16px;">
+        <strong>宁德时代/比亚迪：</strong><strong>中汽协</strong>月度乘用车销量 + SNE Research电池装机量数据。
+      </li>
+      <li style="padding: 12px 0; font-family: Arial, sans-serif; font-size: 16px;">
+        <strong>紫金矿业/中国铝业：</strong>LME金属期货价格（Wind）- 国家发改委电价成本。
+      </li>
+    </ul>
+
+    <!-- 第三部分 -->
+    <h2 style="font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; margin: 64px 0 24px 0; padding-left: 16px; border-left: 6px solid #FF00FF;">
+      三、估算框架与工具
+    </h2>
+
+    <section style="background: #000000; color: #00FF00; border: 4px solid #000000; padding: 24px; margin: 32px 0; font-family: 'Courier New', monospace;">
+      <p style="font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 16px 0; color: #FFFF00;">通用估算公式</p>
+      <p style="font-size: 18px; line-height: 1.6; margin: 0; text-align: center;">
+        净利润 ≈ (销量 × 单价 × 毛利率) - 费用 - 税费
+      </p>
+    </section>
+
+    <p style="font-size: 18px; font-weight: 700; margin: 32px 0 16px 0;">最佳实践时间线：</p>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      <li style="padding: 16px; border: 2px solid #000000; margin-bottom: 8px; font-family: Arial, sans-serif; font-size: 16px;">
+        <span style="display: inline-block; background: #FF0000; color: #ffffff; padding: 4px 12px; font-weight: 700; font-size: 12px; margin-right: 12px;">第1周</span>
+        抓取宏观数据（统计局/海关）。
+      </li>
+      <li style="padding: 16px; border: 2px solid #000000; margin-bottom: 8px; font-family: Arial, sans-serif; font-size: 16px;">
+        <span style="display: inline-block; background: #0066FF; color: #ffffff; padding: 4px 12px; font-weight: 700; font-size: 12px; margin-right: 12px;">第2周</span>
+        渠道调研（高频数据/替代数据）。
+      </li>
+      <li style="padding: 16px; border: 2px solid #000000; margin-bottom: 8px; font-family: Arial, sans-serif; font-size: 16px;">
+        <span style="display: inline-block; background: #FF00FF; color: #ffffff; padding: 4px 12px; font-weight: 700; font-size: 12px; margin-right: 12px;">第3周</span>
+        模型迭代与交叉验证。
+      </li>
+    </ul>
+
+    <!-- 风险提示 -->
+    <section style="background: #FF0000; color: #ffffff; border: 4px solid #000000; padding: 24px; margin: 48px 0; box-shadow: 6px 6px 0 #000000;">
+      <p style="font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 12px 0;">⚠️ 风险提醒</p>
+      <p style="font-size: 14px; line-height: 1.6; margin: 0; font-family: Arial, sans-serif;">
+        预估数据仅供参考，非官方披露。实际财报可能受宏观突发事件、汇率波动等影响。请结合Wind/Bloomberg的分析师一致预期（Consensus Estimates）进行验证。投资有风险，入市需谨慎。
+      </p>
+    </section>
+
+    <footer style="text-align: left; margin-top: 48px; padding-top: 24px; border-top: 4px solid #000000;">
+      <p style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 8px 0;">数据来源</p>
+      <p style="font-size: 14px; color: #000000; margin: 0; font-family: Arial, sans-serif;">Wind, Bloomberg, 国家统计局, 行业协会</p>
+      <p style="font-size: 12px; color: #666; margin: 16px 0 0 0; font-family: Arial, sans-serif;">© 2026 投资策略研究</p>
+    </footer>
+
+  </section>
+</body>
+
+</html>
