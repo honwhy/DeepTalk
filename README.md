@@ -226,7 +226,7 @@ npm run lint
 
 ## Skills
 
-本项目提供 4 个 Qoder Skills，用于与 AI CLI 工具协作：
+本项目提供 5 个 Skills，用于与 AI CLI 工具协作：
 
 ### wechat-article
 
@@ -286,6 +286,28 @@ HTML：<section>...</section>
 ...
 ```
 
+### cloudinary-image-host
+
+将本地图片上传到 Cloudinary，获取永久 HTTP 链接，用于替换文章中的本地图片引用。
+
+**功能：**
+- 支持单张图片、文章提取、目录扫描三种模式
+- 自动替换 Markdown/HTML 中的本地图片引用为 Cloudinary 链接
+- 图片优化和压缩
+- 配额管理和错误处理
+
+**用法示例：**
+```
+# 上传单张图片
+使用 cloudinary-image-host 技能 --image "./contents/images/ev-battery.png"
+
+# 从文章提取并替换图片
+使用 cloudinary-image-host 技能 --article "./markdowns/春节后新能源汽车观察.md" --replace
+
+# 扫描目录批量上传
+使用 cloudinary-image-host 技能 --directory "./contents/images/" --max-uploads 5
+```
+
 ## 环境变量
 
 ```env
@@ -302,6 +324,13 @@ WECHAT_APP_SECRET=...
 # 获取：https://unsplash.com/developers
 # 限制：免费版 50次/小时，5000次/天
 UNSPLASH_ACCESS_KEY=your-key
+
+# Cloudinary 图片托管（cloudinary-image-host 技能）
+# 获取：https://cloudinary.com
+# 限制：免费版每月 25 credits（约 25000 次转换或 25000 MB 存储/带宽）
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
 ```
 
 ## 公众号 API 说明
@@ -336,7 +365,8 @@ DeepTalk/
 │   ├── wechat-article/    # 公众号文章生成
 │   ├── wechat-fetcher/    # 公众号文章抓取
 │   ├── wechat-publisher/  # 公众号文章发布
-│   └── humanizer-zh/      # AI 痕迹去除
+│   ├── humanizer-zh/      # AI 痕迹去除
+│   └── cloudinary-image-host/ # Cloudinary 图片托管
 ├── contents/              # HTML 内容存储
 ├── output/                # LLM 生成输出目录
 └── markdowns/             # Markdown 源文件目录（可通过 /editor 编辑）

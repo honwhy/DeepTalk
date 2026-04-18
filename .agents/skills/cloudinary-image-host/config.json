@@ -1,0 +1,50 @@
+{
+  "name": "cloudinary-image-host",
+  "version": "1.0.0",
+  "description": "Upload local images to Cloudinary and get permanent HTTP links",
+  "main": "SKILL.md",
+  "config": {
+    "cloudinary": {
+      "apiBaseUrl": "https://api.cloudinary.com/v1_1",
+      "uploadEndpoint": "/image/upload",
+      "rateLimit": {
+        "monthlyCredits": 25,
+        "transformations": 25000,
+        "storageBandwidthMB": 25000
+      },
+      "supportedFormats": ["jpg", "jpeg", "png", "gif", "webp", "bmp", "svg"],
+      "maxFileSize": 10485760,
+      "defaultFolder": "deeptalk/articles"
+    },
+    "image": {
+      "defaultQuality": 85,
+      "resizeThreshold": 1920,
+      "compressionEnabled": true
+    },
+    "file": {
+      "backupExtension": ".backup",
+      "mappingFile": "cloudinary-mapping.json",
+      "logFile": "cloudinary-upload.log"
+    },
+    "behavior": {
+      "interactiveMode": true,
+      "confirmUploads": true,
+      "showProgress": true,
+      "retryAttempts": 3,
+      "retryDelay": 1000
+    }
+  },
+  "examples": {
+    "singleImage": "使用 cloudinary-image-host 技能 --image \"./images/example.png\"",
+    "fromArticle": "使用 cloudinary-image-host 技能 --article \"./article.md\" --replace --backup",
+    "directoryScan": "使用 cloudinary-image-host 技能 --directory \"./images/\" --max-uploads 10 --dry-run"
+  },
+  "environment": {
+    "required": ["CLOUDINARY_CLOUD_NAME", "CLOUDINARY_API_KEY", "CLOUDINARY_API_SECRET"],
+    "optional": []
+  },
+  "output": {
+    "formats": ["json", "text", "markdown"],
+    "files": ["mapping.json", "log.txt", "backup files"]
+  }
+}
