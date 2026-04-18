@@ -222,7 +222,7 @@ npm run lint
 | business | 商务风，深蓝主色调 | 商业分析、行业报告 |
 | minimal | 简约风，黑白灰配色 | 通用文章、公众号 |
 
-> **获取更多主题**：访问 [https://getdesign.md/](https://getdesign.md/) 可下载更多精美主题，将主题文件放置到 `.qoder/skills/wechat-article/design-system/references/` 目录下即可使用。
+> **获取更多主题**：访问 [https://getdesign.md/](https://getdesign.md/) 可下载更多精美主题，将主题文件放置到 `.agents/skills/wechat-article/design-system/references/` 目录下即可使用。
 
 ## Skills
 
@@ -332,7 +332,7 @@ DeepTalk/
 │   ├── utils/             # 工具函数
 │   │   └── fetcher.ts     # 公众号文章抓取
 │   └── ...
-├── .qoder/skills/         # Skills 定义
+├── .agents/skills/         # Skills 定义
 │   ├── wechat-article/    # 公众号文章生成
 │   ├── wechat-fetcher/    # 公众号文章抓取
 │   ├── wechat-publisher/  # 公众号文章发布

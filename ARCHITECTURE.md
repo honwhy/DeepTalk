@@ -29,7 +29,7 @@ graph TB
     end
 
     subgraph "技能层 Skills Layer"
-        SKILLS[.qoder/skills/]
+        SKILLS[.agents/skills/]
         SK_WC[wechat-article<br/>公众号文章Skill]
         SK_DESIGN[design-system<br/>设计系统]
     end
@@ -142,7 +142,7 @@ sequenceDiagram
 ```mermaid
 graph TD
     ROOT[DeepTalk/] --> SRC[src/]
-    ROOT --> QODER[.qoder/]
+    ROOT --> QODER[.agents/]
     ROOT --> CONTENTS[contents/]
     ROOT --> MARKDOWNS[markdowns/]
     ROOT --> OUTPUT[output/]
@@ -271,7 +271,7 @@ graph LR
 
 - 新增主题：扩展 `themes` 对象，无需修改核心逻辑
 - 新增 API：实现新接口，注入到 CLI
-- 新增 Skill：在 `.qoder/skills/` 添加目录
+- 新增 Skill：在 `.agents/skills/` 添加目录
 
 ### 4. 依赖倒置 (Dependency Inversion)
 

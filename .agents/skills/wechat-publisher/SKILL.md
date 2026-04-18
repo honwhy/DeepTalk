@@ -423,8 +423,8 @@ HTML：...
 ## 相关文件
 
 - `src/wechat/api.ts` - 微信 API 客户端
-- `.qoder/skills/wechat-article/SKILL.md` - 文章生成 Skill
-- `.qoder/skills/design-system/SKILL.md` - 设计系统规范
+- `.agents/skills/wechat-article/SKILL.md` - 文章生成 Skill
+- `.agents/skills/design-system/SKILL.md` - 设计系统规范
 
 ## 依赖
 

@@ -44,7 +44,7 @@ const title = extractArticleTitle(html);
 ## 文件结构
 
 ```
-.qoder/skills/wechat-fetcher/
+.agents/skills/wechat-fetcher/
 ├── SKILL.md              # 详细文档
 ├── README.md             # 快速入门
 ├── config.json           # Skill 配置
