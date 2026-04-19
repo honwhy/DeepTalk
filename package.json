@@ -38,6 +38,7 @@
   "dependencies": {
     "@types/express": "^5.0.6",
     "axios": "^1.15.0",
+    "cloudinary": "^2.9.0",
     "commander": "^14.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",

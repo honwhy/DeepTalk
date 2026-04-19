@@ -179,7 +179,7 @@ npm run preview-md -- [options]
 
 ```bash
 npm run preview-html -- [options]
-  -i, --input <dir>      HTML 文件目录 (默认: ./contents)
+  -i, --input <dir>      HTML 文件目录 (默认: ./output)
   -p, --port <port>      端口号
 ```
 
@@ -192,7 +192,7 @@ npm run web -- [options]
 ```
 
 **Web 界面功能：**
-- `/` - 文章列表页，展示 contents/ 目录下的所有文件，支持复制公众号格式
+- `/` - 文章列表页，展示 output/ 目录下的所有文件，支持复制公众号格式
 - `/editor` - Markdown 编辑器，支持：
   - 创建、编辑、保存 Markdown 文件到 `markdowns/` 目录
   - 侧边栏文件列表，点击切换编辑
@@ -367,7 +367,7 @@ DeepTalk/
 │   ├── wechat-publisher/  # 公众号文章发布
 │   ├── humanizer-zh/      # AI 痕迹去除
 │   └── cloudinary-image-host/ # Cloudinary 图片托管
-├── contents/              # HTML 内容存储
+├── contents/              # HTML 内容存储 （废弃，不建议使用）
 ├── output/                # LLM 生成输出目录
 └── markdowns/             # Markdown 源文件目录（可通过 /editor 编辑）
 ```
