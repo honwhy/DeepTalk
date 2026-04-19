@@ -121,7 +121,7 @@ export function generateHtml(config: HtmlArticleConfig): string {
     ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
     li { margin-bottom: 0.5rem; }
     img { max-width: 100%; height: auto; border-radius: 8px; }
-    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; display: block; overflow-x: auto; }
     th, td { padding: 0.75rem; border: 1px solid var(--border); text-align: left; }
     th { background: var(--bg-secondary); }
     .meta {

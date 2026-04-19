@@ -1,3 +1,21 @@
+---
+name: wechat-fetcher
+description: |
+  抓取微信公众号文章并转换为 Markdown 格式，支持 CLI 和 Web 界面使用。
+  模拟微信客户端请求头绕过反爬机制，提取文章内容保存为可编辑的 Markdown 格式。
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Glob
+  - Grep
+metadata:
+  trigger: 抓取微信公众号文章，转换为 Markdown 格式
+  category: wechat
+  version: 1.0.0
+---
+
 # WeChat Article Fetcher Skill
 
 抓取微信公众号文章并转换为 Markdown 格式，支持 CLI 和 Web 界面使用。

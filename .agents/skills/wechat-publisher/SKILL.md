@@ -1,3 +1,21 @@
+---
+name: wechat-publisher
+description: |
+  将 HTML 富文本文章发布到微信公众号草稿箱，自动处理封面图片上传获取 media_id。
+  支持多种封面图获取方式：从文章提取、Unsplash 搜索、AI 生成、指定 URL 等。
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Glob
+  - Grep
+metadata:
+  trigger: 发布文章到微信公众号草稿箱，处理封面图片上传
+  category: wechat
+  version: 1.0.0
+---
+
 # WeChat Publisher Skill
 
 将 HTML 富文本文章发布到微信公众号草稿箱，自动处理封面图片上传获取 media_id。
