@@ -257,6 +257,40 @@ padding: 12px 16px; /* 内边距 */
 </section>
 ```
 
+### 表格样式规范
+
+微信公众号中使用表格时，必须添加以下样式以确保兼容性：
+
+```html
+<table style="width: 100%; border-collapse: collapse; margin: 16px 0; display: block; overflow-x: auto;">
+  <thead>
+    <tr>
+      <th style="padding: 12px; border: 1px solid #e8e8e8; text-align: left; font-weight: bold; background-color: #f5f5f5; color: #333;">表头</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding: 12px; border: 1px solid #e8e8e8; color: #333;">内容</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+**表格样式要点：**
+| 元素 | 必需样式 | 说明 |
+|------|----------|------|
+| `<table>` | `display: block; overflow-x: auto` | 防止表格在窄屏设备溢出 |
+| `<th>` | `background-color: {主题色}` | 表头背景色与主题保持一致 |
+| `<td>` | `color: #333` | 确保文字可读性 |
+
+**各主题表头背景色：**
+| 主题 | 背景色 | 用途 |
+|------|--------|------|
+| tech | #35b3ff | 科技蓝 |
+| business | #0f62fe | IBM蓝 |
+| claude | #c96442 | 陶土色 |
+| minimal | #667eea | 主色调 |
+
 ---
 
 ## 样式内联化

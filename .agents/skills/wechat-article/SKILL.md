@@ -1,3 +1,21 @@
+---
+name: wechat-article
+description: |
+  将 Markdown 内容转换为微信公众号兼容的 HTML 格式。
+  支持内联 CSS 样式、多种主题（tech/business/claude/minimal）、智能配图和代码高亮。
+  可自动分析内容选择合适的模板和主题，支持 Unsplash API 获取配图。
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - WebFetch
+metadata:
+  trigger: 生成微信公众号文章、Markdown 转 HTML、公众号排版
+  source: 基于 design-system 设计系统
+---
+
 # WeChat Article Generator Skill
 
 生成符合微信公众号格式的 HTML 文章，使用 design-system 定义的视觉风格系统。
