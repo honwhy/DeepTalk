@@ -159,21 +159,156 @@ overflow: hidden;
 
 ```css
 /* 字体大小 */
-font-size: 14px;  /* 小号文字 */
-font-size: 16px;  /* 正文 */
-font-size: 18px;  /* 小标题 */
-font-size: 20px;  /* 二级标题 */
-font-size: 22px;  /* 一级标题 */
+font-size: 14px;  /* 小号文字：辅助信息、日期等 */
+font-size: 15px;  /* 六级标题 h6 */
+font-size: 16px;  /* 正文、五级标题 h5 */
+font-size: 18px;  /* 四级标题 h4 */
+font-size: 20px;  /* 三级标题 h3 */
+font-size: 24px;  /* 二级标题 h2 */
+font-size: 28px;  /* 强调一级标题 */
+font-size: 32px;  /* 主标题 h1（推荐） */
+font-size: 36px;  /* 主标题 h1（上限） */
 
 /* 行高 */
-line-height: 1.5;   /* 紧凑 */
-line-height: 1.75;  /* 舒适，推荐正文使用 */
+line-height: 1.3;   /* 标题（紧凑） */
+line-height: 1.5;   /* 小标题 */
+line-height: 1.75;  /* 正文（推荐） */
 line-height: 2;     /* 宽松 */
 
 /* 间距 */
 margin: 16px 0;     /* 段落间距 */
 padding: 12px 16px; /* 内边距 */
 ```
+
+---
+
+## 标题字体大小规范
+
+推荐按以下层级设置标题字体大小，h1 最大为 36px：
+
+### 推荐值（激进方案）
+
+| 标签 | font-size | 行高 | 上下间距 | 场景 |
+|------|----------|------|---------|------|
+| **h1** | 32-36px | 1.3 | 24px 12px | 主标题 |
+| **h2** | 26-28px | 1.35 | 20px 10px | 二级标题 |
+| **h3** | 22-24px | 1.4 | 16px 8px | 三级标题 |
+| **h4** | 18-20px | 1.45 | 14px 6px | 四级标题 |
+| **h5** | 16-17px | 1.5 | 12px 6px | 五级标题 |
+| **h6** | 15px | 1.5 | 12px 4px | 六级标题 |
+| 正文 | 16px | 1.75 | 16px 0 | 正文段落 |
+| 小字 | 14px | 1.5 | 8px 0 | 日期、来源等 |
+
+### 替代值（保守方案）
+
+如果需要更保守的字体大小（兼容性更好）：
+
+| 标签 | font-size |
+|------|-----------|
+| **h1** | 30px |
+| **h2** | 24px |
+| **h3** | 20px |
+| **h4** | 18px |
+| **h5** | 16px |
+| **h6** | 15px |
+| 正文 | 16px |
+| 小字 | 14px |
+
+### 标题样式模板
+
+```html
+<!-- h1: 主标题 32-36px -->
+<h1 style="
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1.3;
+  color: #333;
+  margin: 24px 0 12px;
+  text-align: center;
+">文章标题</h1>
+
+<!-- h2: 二级标题 26-28px -->
+<h2 style="
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 1.35;
+  color: #333;
+  margin: 20px 0 10px;
+">二级标题</h2>
+
+<!-- h3: 三级标题 22-24px -->
+<h3 style="
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1.4;
+  color: #333;
+  margin: 16px 0 8px;
+">三级标题</h3>
+
+<!-- h4: 四级标题 18-20px -->
+<h4 style="
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1.45;
+  color: #444;
+  margin: 14px 0 6px;
+">四级标题</h4>
+
+<!-- h5: 五级标题 16-17px -->
+<h5 style="
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.5;
+  color: #444;
+  margin: 12px 0 6px;
+">五级标题</h5>
+
+<!-- h6: 六级标题 15px -->
+<h6 style="
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 1.5;
+  color: #666;
+  margin: 12px 0 4px;
+">六级标题</h6>
+
+<!-- 正文段落 -->
+<p style="
+  font-size: 16px;
+  line-height: 1.75;
+  color: #333;
+  margin: 16px 0;
+  text-align: justify;
+">正文内容</p>
+
+<!-- 小字（日期、来源等） -->
+<p style="
+  font-size: 14px;
+  line-height: 1.5;
+  color: #999;
+  margin: 8px 0;
+  text-align: center;
+">2024年1月1日</p>
+```
+
+### 主题差异化调整
+
+不同主题可微调标题颜色和粗细：
+
+| 主题 | h1 颜色 | h2-h4 颜色 | font-weight |
+|------|---------|------------|-------------|
+| tech | #1a1a1a | #333333 | bold |
+| business | #1a1a1a | #333333 | bold |
+| minimal | #1a1a1a | #333333 | 600 |
+| claude | #2d2d2d | #444444 | bold |
+| dark-finance | #e8e8e8 | #cccccc | bold |
+
+### 注意事项
+
+1. **h1 别超过 36px**，过大可能被微信编辑器过滤或显示异常
+2. **避免连续标题**：h1 后紧跟 h2，中间必须有正文段落
+3. **移动端适配**：实际显示可能略小 1-2px，属于正常现象
+4. **行高随字号递减**：字号越大行高越小，保持呼吸感
 
 ---
 
@@ -344,10 +479,11 @@ const inlinedHtml = juice(html);
 
   <!-- 标题 -->
   <h1 style="
-    font-size: 22px;
+    font-size: 32px;
     font-weight: bold;
+    line-height: 1.3;
     color: #333;
-    margin: 0 0 8px 0;
+    margin: 24px 0 12px 0;
     text-align: center;
   ">文章标题</h1>
 
