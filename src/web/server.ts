@@ -143,29 +143,77 @@ app.get('/api/wechat/:id', (req: Request, res: Response) => {
       // HTML 文件：提取 body 内容并内联样式
       const html = fs.readFileSync(filepath, 'utf-8');
 
-      // 提取标题
-      const titleMatch = html.match(/<h1[^>]*>([^<]+)<\/h1>/i) || html.match(/<title>([^<]+)<\/title>/i);
-      title = titleMatch ? titleMatch[1] : fileId.replace('.html', '');
+      const { Window } = require('happy-dom') as any;
+      const win = new (Window as any)();
+      const parser = new (win.DOMParser as any)();
+      const doc = parser.parseFromString(html, 'text/html');
 
-      // 提取 body 内容
-      const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-      let content = bodyMatch ? bodyMatch[1] : html;
+      const h1 = doc.querySelector('h1');
+      const docTitle = doc.querySelector('title');
+      title = (h1 ? h1.textContent : null) || (docTitle ? docTitle.textContent : null) || fileId.replace('.html', '');
 
-      // 提取 style 标签中的 CSS
-      const styleMatch = html.match(/<style[^>]*>([\s\S]*?)<\/style>/gi);
-      const css = styleMatch ? styleMatch.map(s => s.replace(/<\/?style[^>]*>/gi, '')).join('\n') : '';
+      const body = doc.body;
+      let content = body.innerHTML;
+      let bodyStyle = body.getAttribute('style') || '';
 
-      // 使用 juice 内联样式
+      if (bodyStyle) {
+        content = `<section style="${bodyStyle}">${content}</section>`;
+      } else {
+        doc.querySelectorAll('div').forEach((d: any) => {
+          d.tagName = 'section';
+        });
+        content = body.innerHTML;
+      }
+
+      const styleTags = doc.querySelectorAll('style');
+      const css = Array.from(styleTags).map((s: any) => s.textContent || '').join('\n');
+
       if (css) {
         const juice = require('juice');
         const wrappedContent = `<div id="wechat-content">${content}</div>`;
         wechatHtml = juice.inlineContent(wrappedContent, css);
       } else {
-        // 如果没有 style 标签，假设已经是内联样式，直接使用
         wechatHtml = content;
       }
-    }
 
+      const resultDoc = parser.parseFromString(wechatHtml, 'text/html');
+      const root = resultDoc.body.firstChild;
+
+      if (root) {
+        const style = root.getAttribute('style') || '';
+        if (style) {
+          const newStyle = style.replace(/padding[^;]*;?/gi, '').replace(/;$/, '').replace(/^;/, '');
+          if (newStyle.trim()) {
+            (root as any).setAttribute('style', newStyle.trim());
+          } else {
+            (root as any).removeAttribute('style');
+          }
+        }
+
+        const rows = resultDoc.querySelectorAll('tr');
+        rows.forEach((row: any) => {
+          const rowStyle = row.getAttribute('style') || '';
+          const bgMatch = rowStyle.match(/(?:^|;)\s*background-color\s*:\s*([^;]+)/i);
+          if (bgMatch) {
+            const bg = bgMatch[1].trim();
+            row.querySelectorAll('th, td').forEach((cell: any) => {
+              const cellStyle = cell.getAttribute('style') || '';
+              if (!/background-color/i.test(cellStyle)) {
+                cell.setAttribute('style', cellStyle ? `${cellStyle};background-color:${bg}` : `background-color:${bg}`);
+              }
+            });
+            const newRowStyle = rowStyle.replace(/(?:^|;)\s*background-color\s*:[^;]+/gi, '').replace(/;$/, '').replace(/^;/, '').trim();
+            if (newRowStyle) {
+              row.setAttribute('style', newRowStyle);
+            } else {
+              row.removeAttribute('style');
+            }
+          }
+        });
+
+        wechatHtml = root.outerHTML;
+      }
+    }
     res.json({ html: wechatHtml, title });
   } catch (error) {
     res.status(500).json({ error: '转换失败', details: String(error) });
