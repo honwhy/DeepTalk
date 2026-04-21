@@ -624,7 +624,7 @@ AI 在转换时必须遵循以下规则：
 
 ## 相关文件
 
-- `design-system/SKILL.md` - Design System 使用指南
+- `design-system/index.md` - Design System 使用指南
 - `design-system/references/tech/DESIGN.md` - Tech 主题详细规范
 - `design-system/references/business/DESIGN.md` - Business 主题详细规范
 - `design-system/references/claude/DESIGN.md` - Claude 主题详细规范

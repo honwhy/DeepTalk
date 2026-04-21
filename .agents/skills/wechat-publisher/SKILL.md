@@ -441,7 +441,7 @@ HTML：...
 
 - `src/wechat/api.ts` - 微信 API 客户端
 - `.agents/skills/wechat-article/SKILL.md` - 文章生成 Skill
-- `.agents/skills/design-system/SKILL.md` - 设计系统规范
+- `.agents/skills/wechat-article/design-system/index.md` - 设计系统规范
 
 ## 依赖
 
