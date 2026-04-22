@@ -153,16 +153,11 @@ app.get('/api/wechat/:id', (req: Request, res: Response) => {
       title = (h1 ? h1.textContent : null) || (docTitle ? docTitle.textContent : null) || fileId.replace('.html', '');
 
       const body = doc.body;
-      let content = body.innerHTML;
+      let content = body.innerHTML.replace(/<div(\s|>)/gi, '<section$1').replace(/<\/div>/gi, '</section>');
       let bodyStyle = body.getAttribute('style') || '';
 
       if (bodyStyle) {
         content = `<section style="${bodyStyle}">${content}</section>`;
-      } else {
-        doc.querySelectorAll('div').forEach((d: any) => {
-          d.tagName = 'section';
-        });
-        content = body.innerHTML;
       }
 
       const styleTags = doc.querySelectorAll('style');
