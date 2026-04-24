@@ -4,6 +4,7 @@ import * as path from 'path';
 import { generateHtml, Theme, WeChatTheme } from '../skills';
 import { renderForWeChatCopy } from '../skills/wechatRenderer';
 import { fetchWeChatArticle, extractArticleTitle, extractArticleContent, extractAuthor, extractPublishDate } from '../utils';
+import { renderHtml, formatMarkdown, publishToWeChat, fetchWeChat, humanizeText, uploadImage, fileRead, fileWrite } from '../agents';
 
 const OUTPUT_DIR = path.resolve(__dirname, '../../output');
 const CONTENTS_DIR = path.resolve(__dirname, '../../contents');
@@ -235,6 +236,142 @@ app.post('/api/render', (req: Request, res: Response) => {
   });
 
   res.send(html);
+});
+
+// API 路由 - Agent 渲染 HTML（LLM 直接生成）
+app.post('/api/agent/render', async (req: Request, res: Response) => {
+  const { content, theme = 'auto', title } = req.body;
+
+  if (!content) {
+    res.status(400).json({ error: '缺少 content 内容' });
+    return;
+  }
+
+  try {
+    const html = await renderHtml({ content, theme, title });
+    res.send(html);
+  } catch (error) {
+    res.status(500).json({ error: '渲染失败', details: String(error) });
+  }
+});
+
+// API 路由 - Agent 格式化 Markdown
+app.post('/api/agent/format', async (req: Request, res: Response) => {
+  const { content, template = 'auto' } = req.body;
+
+  if (!content) {
+    res.status(400).json({ error: '缺少 content 内容' });
+    return;
+  }
+
+  try {
+    const formatted = await formatMarkdown({ content, template });
+    res.send(formatted);
+  } catch (error) {
+    res.status(500).json({ error: '格式化失败', details: String(error) });
+  }
+});
+
+// API 路由 - Agent 发布到微信公众号
+app.post('/api/agent/publish', async (req: Request, res: Response) => {
+  const { html, title, coverImage, author } = req.body;
+
+  if (!html || !title) {
+    res.status(400).json({ error: '缺少 html 或 title' });
+    return;
+  }
+
+  try {
+    const result = await publishToWeChat({ html, title, coverImage, author });
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: '发布失败', details: String(error) });
+  }
+});
+
+// API 路由 - Agent 抓取微信公众号文章
+app.post('/api/agent/fetch', async (req: Request, res: Response) => {
+  const { url } = req.body;
+
+  if (!url) {
+    res.status(400).json({ error: '缺少 url' });
+    return;
+  }
+
+  try {
+    const result = await fetchWeChat({ url });
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: '抓取失败', details: String(error) });
+  }
+});
+
+// API 路由 - Agent 人类化文本
+app.post('/api/agent/humanize', async (req: Request, res: Response) => {
+  const { content } = req.body;
+
+  if (!content) {
+    res.status(400).json({ error: '缺少 content' });
+    return;
+  }
+
+  try {
+    const humanized = await humanizeText({ content });
+    res.send(humanized);
+  } catch (error) {
+    res.status(500).json({ error: '人类化失败', details: String(error) });
+  }
+});
+
+// API 路由 - Agent 上传图片到 Cloudinary
+app.post('/api/agent/upload-image', async (req: Request, res: Response) => {
+  const { filepath, url } = req.body;
+
+  if (!filepath && !url) {
+    res.status(400).json({ error: '缺少 filepath 或 url' });
+    return;
+  }
+
+  try {
+    const result = await uploadImage({ filepath, url });
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: '上传失败', details: String(error) });
+  }
+});
+
+// API 路由 - Agent 读取文件
+app.get('/api/agent/file', async (req: Request, res: Response) => {
+  const { path: filepath } = req.query;
+
+  if (!filepath) {
+    res.status(400).json({ error: '缺少 path 参数' });
+    return;
+  }
+
+  try {
+    const result = await fileRead({ filepath: filepath as string });
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: '读取失败', details: String(error) });
+  }
+});
+
+// API 路由 - Agent 写入文件
+app.post('/api/agent/file', async (req: Request, res: Response) => {
+  const { filepath, content } = req.body;
+
+  if (!filepath || !content) {
+    res.status(400).json({ error: '缺少 filepath 或 content' });
+    return;
+  }
+
+  try {
+    const result = await fileWrite({ filepath, content });
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: '写入失败', details: String(error) });
+  }
 });
 
 // API 路由 - 保存 Markdown 文件
@@ -850,6 +987,142 @@ function getEditorHtml(): string {
       color: var(--color-white);
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
+    .toolbar .agent-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-weight: 500;
+    }
+    .agent-drawer {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      max-width: 90vw;
+      height: 100vh;
+      background: white;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.3s ease;
+    }
+    .agent-drawer.show { right: 0; }
+    .agent-drawer-header {
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .agent-drawer-header h3 { font-size: 16px; font-weight: 600; }
+    .agent-drawer-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+    .agent-drawer-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .agent-messages {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .agent-message {
+      padding: 12px 16px;
+      border-radius: 12px;
+      max-width: 85%;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .agent-message.user {
+      align-self: flex-end;
+      background: #667eea;
+      color: white;
+    }
+    .agent-message.assistant {
+      align-self: flex-start;
+      background: #f0f0f0;
+      color: #333;
+    }
+    .agent-message .error {
+      color: #dc3545;
+      font-size: 12px;
+    }
+    .agent-input-area {
+      padding: 12px;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 8px;
+    }
+    .agent-input-area input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+    .agent-input-area input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    .agent-input-area button {
+      padding: 10px 16px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .agent-input-area button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .agent-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid #eee;
+    }
+    .agent-action-btn {
+      padding: 8px 12px;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .agent-action-btn:hover {
+      background: #667eea;
+      color: white;
+    }
+    .agent-drawer-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 9999;
+    }
+    .agent-drawer-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
     .toolbar input {
       background: var(--color-glass-light);
       color: var(--color-white);
@@ -1062,6 +1335,7 @@ function getEditorHtml(): string {
     <button onclick="renderPreview()">刷新预览</button>
     <button onclick="downloadHtml()">下载 HTML</button>
     <button onclick="showFetchDialog()" class="secondary" style="background: #28a745; color: white; border-color: #28a745;">抓取公众号文章</button>
+    <button onclick="toggleAgentDrawer()" class="agent-btn">🤖 AI 助手</button>
     <span class="spacer"></span>
     <a href="/">← 返回列表</a>
   </div>
@@ -1103,6 +1377,39 @@ console.log('Hello, DeepTalk!');
       <div class="buttons">
         <button class="secondary" onclick="closeFetchDialog()">取消</button>
         <button class="primary" onclick="fetchArticle()" id="fetchBtn">开始抓取</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI 助手抽屉 -->
+  <div class="agent-drawer-overlay" id="agentDrawerOverlay" onclick="toggleAgentDrawer()"></div>
+  <div class="agent-drawer" id="agentDrawer">
+    <div class="agent-drawer-header">
+      <h3>🤖 AI 助手</h3>
+      <button class="agent-drawer-close" onclick="toggleAgentDrawer()">×</button>
+    </div>
+    <div class="agent-drawer-content">
+      <div class="agent-messages" id="agentMessages">
+        <div class="agent-message assistant">
+          你好！我是 AI 助手，可以帮你：<br><br>
+          • <b>渲染 HTML</b> - 使用 LLM 直接生成公众号兼容的 HTML<br>
+          • <b>格式化文章</b> - 优化 Markdown 结构<br>
+          • <b>去除 AI 痕迹</b> - 让文章更自然<br>
+          • <b>上传图片</b> - 上传到 Cloudinary<br>
+          • <b>抓取文章</b> - 抓取公众号文章<br><br>
+          直接告诉我你想做什么，或者点击下方快捷操作。
+        </div>
+      </div>
+      <div class="agent-actions">
+        <button class="agent-action-btn" onclick="runAgentAction('render')">🎨 渲染 HTML</button>
+        <button class="agent-action-btn" onclick="runAgentAction('format')">📝 格式化</button>
+        <button class="agent-action-btn" onclick="runAgentAction('humanize')">✨ 去除 AI 痕迹</button>
+        <button class="agent-action-btn" onclick="runAgentAction('publish')">📤 发布到公众号</button>
+        <button class="agent-action-btn" onclick="runAgentAction('upload')">📷 上传图片</button>
+      </div>
+      <div class="agent-input-area">
+        <input type="text" id="agentInput" placeholder="告诉 AI 你想做什么..." onkeypress="handleAgentKeypress(event)">
+        <button onclick="sendToAgent()" id="agentSendBtn">发送</button>
       </div>
     </div>
   </div>
@@ -1327,6 +1634,149 @@ console.log('Hello, DeepTalk!');
     document.getElementById('fetchDialog').addEventListener('click', (e) => {
       if (e.target.id === 'fetchDialog') closeFetchDialog();
     });
+
+    // AI 助手相关函数
+    function toggleAgentDrawer() {
+      const drawer = document.getElementById('agentDrawer');
+      const overlay = document.getElementById('agentDrawerOverlay');
+      drawer.classList.toggle('show');
+      overlay.classList.toggle('show');
+    }
+
+    function handleAgentKeypress(e) {
+      if (e.key === 'Enter') sendToAgent();
+    }
+
+    function appendAgentMessage(content, role) {
+      const container = document.getElementById('agentMessages');
+      const div = document.createElement('div');
+      const messageRole = role || 'assistant';
+      div.className = 'agent-message ' + messageRole;
+      div.innerHTML = content;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendToAgent() {
+      const input = document.getElementById('agentInput');
+      const btn = document.getElementById('agentSendBtn');
+      const message = input.value.trim();
+      if (!message) return;
+
+      appendAgentMessage(message, 'user');
+      input.value = '';
+      btn.disabled = true;
+
+      try {
+        // 简单意图识别
+        let result;
+        if (message.includes('渲染') || message.includes('html') || message.includes('HTML')) {
+          result = await callAgentAPI('/api/agent/render', {
+            content: document.getElementById('markdown').value,
+            theme: 'auto',
+            title: document.getElementById('title').value
+          }, '渲染 HTML');
+        } else if (message.includes('格式化') || message.includes('优化结构') || message.includes('模板')) {
+          result = await callAgentAPI('/api/agent/format', {
+            content: document.getElementById('markdown').value,
+            template: 'auto'
+          }, '格式化 Markdown');
+        } else if (message.includes('去除') || message.includes('AI') || message.includes('痕迹') || message.includes('自然')) {
+          result = await callAgentAPI('/api/agent/humanize', {
+            content: document.getElementById('markdown').value
+          }, '去除 AI 痕迹');
+        } else if (message.includes('发布') || message.includes('公众号')) {
+          // 先渲染 HTML 再发布
+          const html = await callAgentAPI('/api/agent/render', {
+            content: document.getElementById('markdown').value,
+            theme: 'auto',
+            title: document.getElementById('title').value
+          }, '渲染 HTML');
+          result = await callAgentAPI('/api/agent/publish', {
+            html: html,
+            title: document.getElementById('title').value
+          }, '发布到公众号');
+        } else {
+          appendAgentMessage('我理解了你说的是 "' + message + '"。你可以：<br>• 告诉AI“渲染HTML”或“用tech主题渲染”<br>• 告诉AI“格式化文章”或“优化结构”<br>• 告诉AI“去除AI痕迹”<br>• 告诉AI“发布到公众号”<br>• 或点击下方快捷操作按钮', 'assistant');
+        }
+      } catch (err) {
+        appendAgentMessage('<span class="error">操作失败: ' + err.message + '</span>', 'assistant');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function runAgentAction(action) {
+      const markdown = document.getElementById('markdown').value;
+      const title = document.getElementById('title').value;
+      const btn = event.target;
+
+      if (!markdown && action !== 'upload') {
+        appendAgentMessage('请先在编辑器中输入内容', 'assistant');
+        return;
+      }
+
+      btn.disabled = true;
+      const originalText = btn.textContent;
+
+      try {
+        if (action === 'render') {
+          const html = await callAgentAPI('/api/agent/render', {
+            content: markdown,
+            theme: 'auto',
+            title: title
+          }, '渲染 HTML');
+          document.getElementById('previewFrame').srcdoc = html;
+          appendAgentMessage('✅ HTML 已渲染到预览区', 'assistant');
+        } else if (action === 'format') {
+          const formatted = await callAgentAPI('/api/agent/format', {
+            content: markdown,
+            template: 'auto'
+          }, '格式化 Markdown');
+          document.getElementById('markdown').value = formatted;
+          appendAgentMessage('✅ Markdown 已格式化', 'assistant');
+          renderPreview();
+        } else if (action === 'humanize') {
+          const humanized = await callAgentAPI('/api/agent/humanize', {
+            content: markdown
+          }, '去除 AI 痕迹');
+          document.getElementById('markdown').value = humanized;
+          appendAgentMessage('✅ AI 写作痕迹已去除', 'assistant');
+          renderPreview();
+        } else if (action === 'publish') {
+          const html = await callAgentAPI('/api/agent/render', {
+            content: markdown,
+            theme: 'auto',
+            title: title
+          }, '渲染 HTML');
+          const result = await callAgentAPI('/api/agent/publish', {
+            html: html,
+            title: title
+          }, '发布到公众号');
+          appendAgentMessage('✅ 已发布到公众号草稿箱', 'assistant');
+        } else if (action === 'upload') {
+          appendAgentMessage('请提供图片 URL 或文件路径', 'assistant');
+        }
+      } catch (err) {
+        appendAgentMessage('<span class="error">操作失败: ' + err.message + '</span>', 'assistant');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    }
+
+    async function callAgentAPI(url, body, actionName) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || data.details || actionName + '失败');
+      }
+      return data;
+    }
   </script>
 </body>
 </html>`;
