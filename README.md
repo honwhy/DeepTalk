@@ -206,11 +206,41 @@ npm run lint
 
 ## 主题说明
 
-| 主题 | 说明 | 适用场景 |
-|------|------|----------|
-| tech | 科技风，蓝色主色调 | 技术博客、代码教程 |
-| business | 商务风，深蓝主色调 | 商业分析、行业报告 |
-| minimal | 简约风，黑白灰配色 | 通用文章、公众号 |
+支持 16 种精美主题，灵感来自全球知名科技公司设计系统：
+
+| 主题 | 设计风格 | 主色调 | 适用场景 |
+|------|----------|--------|----------|
+| **airbnb** | 旅行杂志风格 | Rausch 珊瑚粉 `#ff385c` | 旅行、生活方式、住宿推荐 |
+| **apple** | 苹果极简风格 | 黑白 + Apple Blue `#0071e3` | 产品介绍、科技评测 |
+| **binance** | 币安金融风格 | 金色 `#F0B90B` | 加密货币、金融分析 |
+| **claude** | Anthropic 暖调风格 | 羊皮纸色 + 赤陶 `#c96442` | AI 文章、深度分析 |
+| **coinbase** | Coinbase 风格 | 蓝色 `#0052ff` | 加密货币、Web3 |
+| **japanese-zen** | 日式禅意风格 | 纸质白 + 墨黑 `#2a2a2a` | 生活美学、文化艺术 |
+| **luxury-editorial** | 奢华编辑风格 | 深黑 + 香槟金 `#c9a962` | 奢侈品牌、时尚杂志 |
+| **mastercard** | 万事达暖调风格 | 奶油色 `#F3F0EE` | 金融、商务服务 |
+| **notion** | Notion 极简风格 | 白色 + 蓝 `#0075de` | 效率工具、科技博客 |
+| **neo-brutalist** | 新粗野主义 | 纯黑纯白 + 霓虹黄 `#FFFF00` | 创意设计、潮流文化 |
+| **opencode.ai** | 终端极客风格 | 暖黑色 `#201d1d` + 终端绿 | 开发者工具、编程教程 |
+| **spacex** | SpaceX 电影风格 | 纯黑 + 幽灵白 `#f0f0fa` | 航天科技、探索主题 |
+| **standard** | 财经专业风格 | 绿色 `#05c15f` + 金色 `#fdbb2d` | 投资理财、商业分析 |
+| **stripe** | Stripe 精致风格 | 深海军蓝 + 紫 `#533afd` | 支付金融、SaaS 产品 |
+| **vercel** | Vercel 开发者风格 | 纯白 + 深灰 `#171717` | 开发者文档、技术教程 |
+| **vintage-newspaper** | 复古报纸风格 | 新闻纸色 `#f4f1ea` + 墨黑 | 时事新闻、深度报道 |
+
+
+### 主题使用
+
+```bash
+# 使用指定主题转换为公众号格式
+npm run wechat -- -i article.md --theme airbnb --copy
+
+# 使用指定主题转换为 HTML
+npm run md2html -- -i article.md -o ./contents -t stripe
+```
+
+### 主题定制
+
+如需自定义主题，可将主题文件放置到 `.agents/skills/wechat-article/design-system/references/` 目录下，参考现有主题的 DESIGN.md 规范格式编写。
 
 > **获取更多主题**：访问 [https://getdesign.md/](https://getdesign.md/) 可下载更多精美主题，将主题文件放置到 `.agents/skills/wechat-article/design-system/references/` 目录下即可使用。
 
@@ -224,13 +254,13 @@ npm run lint
 
 **功能：**
 - Markdown 转 HTML（内联 CSS）
-- 智能主题选择（tech / business / claude / minimal）
+- 16 种精美主题（airbnb、apple、binance、claude、coinbase、japanese-zen、luxury-editorial、mastercard、notion、neo-brutalist、opencode.ai、spacex、standard、stripe、vercel、vintage-newspaper）
 - 智能配图（Unsplash API）
 - 多种文章模板（tutorial / analysis / news / story / listicle / review）
 
 **用法示例：**
 ```
-生成微信公众号文章，主题为 tech，内容如下：
+生成微信公众号文章，主题为 stripe，内容如下：
 # React Hooks 入门指南
 ...
 ```
