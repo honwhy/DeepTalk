@@ -101,17 +101,7 @@ npm run fetch-wechat -- -u "https://mp.weixin.qq.com/s/xxx" --html
 npm run md2html -- [options]
   -i, --input <file>     Markdown 文件路径
   -o, --output <dir>     输出目录
-  -t, --theme <theme>    主题：tech|minimal|business
-  --open                 转换后自动打开浏览器
-```
-
-### wechat - 公众号格式转换
-
-```bash
-npm run wechat -- [options]
-  -i, --input <file>     Markdown 文件路径
-  -o, --output <file>    输出文件路径
-  -t, --theme <theme>    主题：tech|business|minimal
+  -t, --theme <theme>    主题：standard (默认)
   --title <title>        文章标题
   --author <author>      作者名称
   --copy                 生成可复制片段（无 HTML/HEAD 标签）

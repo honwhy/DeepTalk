@@ -49,13 +49,13 @@ export function detectTheme(content: string): Exclude<ThemeType, 'auto'> {
   // 科技类特征
   const techKeywords = ['代码', '编程', '算法', 'api', '框架', '开发', '技术', '软件', '数据库', '前端', '后端', 'ai模型', 'python', 'javascript', 'java', 'react', 'vue'];
   if (techKeywords.some(k => lowerContent.includes(k))) {
-    return 'tech';
+    return 'spacex';
   }
 
   // 商务类特征
   const businessKeywords = ['市场', '商业', '投资', '战略', '行业', '数据', '报告', '分析', '增长', '营收', '商业模式', 'b2b', 'b2c'];
   if (businessKeywords.some(k => lowerContent.includes(k))) {
-    return 'business';
+    return 'stripe';
   }
 
   // 文艺类特征
@@ -65,7 +65,7 @@ export function detectTheme(content: string): Exclude<ThemeType, 'auto'> {
   }
 
   // 默认为极简风
-  return 'minimal';
+  return 'vercel';
 }
 
 /**
@@ -235,9 +235,21 @@ export function getAvailableTemplates(): { value: Exclude<TemplateType, 'auto'>;
  */
 export function getAvailableThemes(): { value: Exclude<ThemeType, 'auto'>; label: string }[] {
   return [
-    { value: 'tech', label: '科技风' },
-    { value: 'business', label: '商务风' },
-    { value: 'claude', label: '文艺风' },
-    { value: 'minimal', label: '极简风' },
+    { value: 'airbnb', label: 'Airbnb' },
+    { value: 'apple', label: 'Apple' },
+    { value: 'binance', label: 'Binance' },
+    { value: 'claude', label: 'Claude (Anthropic)' },
+    { value: 'coinbase', label: 'Coinbase' },
+    { value: 'japanese-zen', label: 'Japanese Zen' },
+    { value: 'luxury-editorial', label: 'Luxury Editorial' },
+    { value: 'mastercard', label: 'Mastercard' },
+    { value: 'neo-brutalist', label: 'Neo Brutalist' },
+    { value: 'notion', label: 'Notion' },
+    { value: 'opencode.ai', label: 'OpenCode AI' },
+    { value: 'spacex', label: 'SpaceX' },
+    { value: 'standard', label: 'Standard' },
+    { value: 'stripe', label: 'Stripe' },
+    { value: 'vercel', label: 'Vercel' },
+    { value: 'vintage-newspaper', label: 'Vintage Newspaper' },
   ];
 }

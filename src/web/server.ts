@@ -90,7 +90,7 @@ app.get('/api/files/:id', (req: Request, res: Response) => {
   if (ext === '.html') {
     res.sendFile(filepath);
   } else if (ext === '.md') {
-    const theme = (req.query.theme as Theme) || 'tech';
+    const theme = (req.query.theme as Theme) || 'standard';
     const content = fs.readFileSync(filepath, 'utf-8');
     const titleMatch = content.match(/^#\s+(.+)$/m);
     const title = titleMatch ? titleMatch[1] : fileId;
@@ -115,7 +115,7 @@ app.get('/api/files/:id', (req: Request, res: Response) => {
 app.get('/api/wechat/:id', (req: Request, res: Response) => {
   const dir = (req.query.dir as string) || OUTPUT_DIR;
   const fileId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-  const theme = (req.query.theme as WeChatTheme) || 'tech';
+  const theme = (req.query.theme as WeChatTheme) || 'standard';
   const filepath = path.join(dir, fileId);
 
   if (!fs.existsSync(filepath)) {
@@ -217,7 +217,7 @@ app.get('/api/wechat/:id', (req: Request, res: Response) => {
 
 // API 路由 - Markdown 转 HTML（POST）
 app.post('/api/render', (req: Request, res: Response) => {
-  const { markdown, theme = 'tech', title = 'Preview' } = req.body;
+  const { markdown, theme = 'standard', title = 'Preview' } = req.body;
 
   if (!markdown) {
     res.status(400).json({ error: '缺少 markdown 内容' });
@@ -415,7 +415,7 @@ export function startPreviewServer(
   if (mode === 'markdown' && options.mdPath) {
     // Markdown 预览模式
     server.get('/', (_req: Request, res: Response) => {
-      const theme = options.theme || 'tech';
+      const theme = options.theme || 'standard';
       const content = fs.readFileSync(options.mdPath!, 'utf-8');
       const titleMatch = content.match(/^#\s+(.+)$/m);
       const title = titleMatch ? titleMatch[1] : path.basename(options.mdPath!);

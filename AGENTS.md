@@ -164,8 +164,8 @@ Top-level type definitions:
 ### skills/types.ts
 
 Renderer-specific type definitions:
-- `Theme` - `'tech' | 'minimal' | 'business'`
-- `WeChatTheme` - `'tech' | 'business' | 'minimal'`
+- `Theme` - 16 themes: airbnb, apple, binance, claude, coinbase, japanese-zen, luxury-editorial, mastercard, neo-brutalist, notion, opencode.ai, spacex, standard, stripe, vercel, vintage-newspaper
+- `WeChatTheme` - Same as Theme (for WeChat compatibility)
 - `HtmlArticleConfig` - `generateHtml()` input config
 - `WeChatRenderOptions` - `renderForWeChat()` options
 - `WeChatArticle` - WeChat article structure
@@ -224,7 +224,7 @@ WeChat Public Account API client (`WeChatAPI` class):
 
 ### htmlGenerator.ts
 
-Standard HTML renderer with three themes (tech, minimal, business).
+Standard HTML renderer with 16 themes (airbnb, apple, binance, claude, coinbase, japanese-zen, luxury-editorial, mastercard, neo-brutalist, notion, opencode.ai, spacex, standard, stripe, vercel, vintage-newspaper).
 Uses highlight.js for code syntax highlighting.
 
 ### generators/index.ts
@@ -283,7 +283,7 @@ Located at `.agents/skills/wechat-article/SKILL.md`
 
 AI-driven Markdown-to-WeChat-HTML conversion skill. Defines:
 - Input parameters (content, title, theme, template, images)
-- Four themes: tech, business, claude, minimal (+ dark-finance, standard, neo-brutalist, luxury-editorial, japanese-zen, vintage-newspaper via design-system)
+- 16 themes: airbnb, apple, binance, claude, coinbase, japanese-zen, luxury-editorial, mastercard, neo-brutalist, notion, opencode.ai, spacex, standard, stripe, vercel, vintage-newspaper (via design-system)
 - Six templates: tutorial, analysis, news, story, listicle, review
 - Smart image handling (auto/manual/none) with Unsplash integration
 - Output format (inline CSS HTML, written to `output/`)

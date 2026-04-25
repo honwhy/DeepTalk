@@ -5,42 +5,197 @@ const { marked } = require('marked');
 import juice from 'juice';
 import { WeChatTheme, WeChatRenderOptions } from './types';
 
-// 公众号文章样式（参考 doocs/md）
 const wechatThemes: Record<WeChatTheme, string> = {
-  tech: `
+  airbnb: `
     :root {
-      --bg: #fff;
-      --text: #333;
-      --text-light: #666;
-      --primary: #35b3ff;
-      --border: #e8e8e8;
-      --code-bg: #f6f8fa;
-      --quote-bg: #f8f8f8;
-      --quote-border: #35b3ff;
+      --bg: #ffffff;
+      --text: #484848;
+      --text-light: #767676;
+      --primary: #ff5a5f;
+      --border: #e6e6e6;
+      --code-bg: #fafafa;
+      --quote-bg: #f9f9f9;
+      --quote-border: #ff5a5f;
     }
   `,
-  business: `
+  apple: `
     :root {
-      --bg: #fff;
-      --text: #333;
-      --text-light: #666;
-      --primary: #2d5a7b;
-      --border: #e8e8e8;
+      --bg: #ffffff;
+      --text: #1d1d1f;
+      --text-light: #86868b;
+      --primary: #0071e3;
+      --border: #d2d2d7;
+      --code-bg: #f5f5f7;
+      --quote-bg: #f5f5f7;
+      --quote-border: #0071e3;
+    }
+  `,
+  binance: `
+    :root {
+      --bg: #ffffff;
+      --text: #2a2a2a;
+      --text-light: #5f6a7d;
+      --primary: #f0b90a;
+      --border: #e1e3e8;
+      --code-bg: #f8f9fa;
+      --quote-bg: #faf8f0;
+      --quote-border: #f0b90a;
+    }
+  `,
+  claude: `
+    :root {
+      --bg: #f5f4ed;
+      --text: #141413;
+      --text-light: #5e5d59;
+      --primary: #c96442;
+      --border: #e8e6dc;
+      --code-bg: #faf9f5;
+      --quote-bg: #e8e6dc;
+      --quote-border: #c96442;
+    }
+  `,
+  coinbase: `
+    :root {
+      --bg: #ffffff;
+      --text: #0a0b0d;
+      --text-light: #5f6b7a;
+      --primary: #0052ff;
+      --border: #e2e4e8;
+      --code-bg: #f5f7fa;
+      --quote-bg: #f0f4fd;
+      --quote-border: #0052ff;
+    }
+  `,
+  'japanese-zen': `
+    :root {
+      --bg: #f5f0e8;
+      --text: #3d3d3d;
+      --text-light: #7a7a7a;
+      --primary: #8b7355;
+      --border: #d9d0c5;
+      --code-bg: #faf8f5;
+      --quote-bg: #ebe6db;
+      --quote-border: #8b7355;
+    }
+  `,
+  'luxury-editorial': `
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a1a;
+      --text-light: #666666;
+      --primary: #b8966b;
+      --border: #e5e5e5;
+      --code-bg: #fafafa;
+      --quote-bg: #f5f5f5;
+      --quote-border: #b8966b;
+    }
+  `,
+  mastercard: `
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a1a;
+      --text-light: #767676;
+      --primary: #eb001b;
+      --border: #e6e6e6;
+      --code-bg: #f8f8f8;
+      --quote-bg: #fef0f0;
+      --quote-border: #eb001b;
+    }
+  `,
+  'neo-brutalist': `
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --text-light: #555555;
+      --primary: #000000;
+      --border: #000000;
+      --code-bg: #f0f0f0;
+      --quote-bg: #ffff00;
+      --quote-border: #000000;
+    }
+  `,
+  notion: `
+    :root {
+      --bg: #ffffff;
+      --text: #37352f;
+      --text-light: #787774;
+      --primary: #2eaadc;
+      --border: #e8e7e4;
+      --code-bg: #f7f6f3;
+      --quote-bg: #eeeeec;
+      --quote-border: #2eaadc;
+    }
+  `,
+  'opencode.ai': `
+    :root {
+      --bg: #ffffff;
+      --text: #1e1e2e;
+      --text-light: #6e6e7e;
+      --primary: #6366f1;
+      --border: #e2e2e8;
+      --code-bg: #f8f8fc;
+      --quote-bg: #f0f0fa;
+      --quote-border: #6366f1;
+    }
+  `,
+  spacex: `
+    :root {
+      --bg: #000000;
+      --text: #f0f0fa;
+      --text-light: #a0a0b0;
+      --primary: #ffffff;
+      --border: #303030;
+      --code-bg: #0a0a0a;
+      --quote-bg: #101010;
+      --quote-border: #ffffff;
+    }
+  `,
+  standard: `
+    :root {
+      --bg: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --primary: #1890ff;
+      --border: #e0e0e0;
       --code-bg: #f5f5f5;
       --quote-bg: #fafafa;
-      --quote-border: #2d5a7b;
+      --quote-border: #1890ff;
     }
   `,
-  minimal: `
+  stripe: `
     :root {
-      --bg: #fff;
-      --text: #333;
-      --text-light: #888;
-      --primary: #333;
-      --border: #eee;
-      --code-bg: #f8f8f8;
-      --quote-bg: #fafafa;
-      --quote-border: #333;
+      --bg: #ffffff;
+      --text: #061b31;
+      --text-light: #64748d;
+      --primary: #533afd;
+      --border: #e5edf5;
+      --code-bg: #f5f7fa;
+      --quote-bg: #f0f4fc;
+      --quote-border: #533afd;
+    }
+  `,
+  vercel: `
+    :root {
+      --bg: #ffffff;
+      --text: #171717;
+      --text-light: #666666;
+      --primary: #000000;
+      --border: #ebebeb;
+      --code-bg: #fafafa;
+      --quote-bg: #f5f5f5;
+      --quote-border: #171717;
+    }
+  `,
+  'vintage-newspaper': `
+    :root {
+      --bg: #f5f2e8;
+      --text: #2b2b2b;
+      --text-light: #666666;
+      --primary: #8b4513;
+      --border: #c9c2b0;
+      --code-bg: #ebe8de;
+      --quote-bg: #ddd8c8;
+      --quote-border: #8b4513;
     }
   `,
 };
@@ -166,7 +321,7 @@ export function renderForWeChat(
   options: WeChatRenderOptions = {}
 ): string {
   const {
-    theme = 'tech',
+    theme = 'standard',
     title = '',
     author = '',
     customStyles = '',
@@ -237,7 +392,7 @@ export function renderForWeChatCopy(
   options: WeChatRenderOptions = {}
 ): string {
   const {
-    theme = 'tech',
+    theme = 'standard',
     title = '',
     author = '',
     customStyles = '',

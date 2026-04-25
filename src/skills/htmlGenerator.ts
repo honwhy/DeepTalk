@@ -3,74 +3,186 @@ const { marked } = require('marked');
 import { Theme, HtmlArticleConfig } from './types';
 
 const themes: Record<Theme, string> = {
-  tech: `
+  airbnb: `
     :root {
-      --bg-primary: #0d1117;
-      --bg-secondary: #161b22;
-      --text-primary: #c9d1d9;
-      --text-secondary: #8b949e;
-      --accent: #58a6ff;
-      --border: #30363d;
-      --code-bg: #1f2428;
-    }
-    body {
-      background: var(--bg-primary);
-      color: var(--text-primary);
-    }
-    a { color: var(--accent); }
-    pre, code {
-      background: var(--code-bg);
-      border-radius: 6px;
-    }
-    blockquote {
-      border-left: 4px solid var(--accent);
-      background: var(--bg-secondary);
+      --bg-primary: #ffffff;
+      --bg-secondary: #fafafa;
+      --text-primary: #484848;
+      --text-secondary: #767676;
+      --accent: #ff5a5f;
+      --border: #e6e6e6;
+      --code-bg: #fafafa;
     }
   `,
-  minimal: `
+  apple: `
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f7;
+      --text-primary: #1d1d1f;
+      --text-secondary: #86868b;
+      --accent: #0071e3;
+      --border: #d2d2d7;
+      --code-bg: #f5f5f7;
+    }
+  `,
+  binance: `
     :root {
       --bg-primary: #ffffff;
       --bg-secondary: #f8f9fa;
-      --text-primary: #212529;
-      --text-secondary: #6c757d;
-      --accent: #0d6efd;
-      --border: #dee2e6;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem;
-      background: var(--bg-primary);
-      color: var(--text-primary);
+      --text-primary: #2a2a2a;
+      --text-secondary: #5f6a7d;
+      --accent: #f0b90a;
+      --border: #e1e3e8;
+      --code-bg: #f8f9fa;
     }
   `,
-  business: `
+  claude: `
     :root {
-      --bg-primary: #fafbfc;
-      --bg-secondary: #ffffff;
-      --text-primary: #1a1a2e;
-      --text-secondary: #4a5568;
-      --accent: #2d5a7b;
-      --border: #e2e8f0;
-      --header-bg: #1a1a2e;
+      --bg-primary: #f5f4ed;
+      --bg-secondary: #faf9f5;
+      --text-primary: #141413;
+      --text-secondary: #5e5d59;
+      --accent: #c96442;
+      --border: #e8e6dc;
+      --code-bg: #faf9f5;
     }
-    body {
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      font-family: "Georgia", serif;
+  `,
+  coinbase: `
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f7fa;
+      --text-primary: #0a0b0d;
+      --text-secondary: #5f6b7a;
+      --accent: #0052ff;
+      --border: #e2e4e8;
+      --code-bg: #f5f7fa;
     }
-    .header {
-      background: var(--header-bg);
-      color: #fff;
-      padding: 2rem;
-      margin: -2rem -2rem 2rem -2rem;
+  `,
+  'japanese-zen': `
+    :root {
+      --bg-primary: #f5f0e8;
+      --bg-secondary: #faf8f5;
+      --text-primary: #3d3d3d;
+      --text-secondary: #7a7a7a;
+      --accent: #8b7355;
+      --border: #d9d0c5;
+      --code-bg: #faf8f5;
+    }
+  `,
+  'luxury-editorial': `
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --text-primary: #1a1a1a;
+      --text-secondary: #666666;
+      --accent: #b8966b;
+      --border: #e5e5e5;
+      --code-bg: #fafafa;
+    }
+  `,
+  mastercard: `
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f8f8;
+      --text-primary: #1a1a1a;
+      --text-secondary: #767676;
+      --accent: #eb001b;
+      --border: #e6e6e6;
+      --code-bg: #f8f8f8;
+    }
+  `,
+'neo-brutalist': `
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f0f0f0;
+      --text-primary: #000000;
+      --text-secondary: #555555;
+      --accent: #000000;
+      --border: #000000;
+      --code-bg: #f0f0f0;
+    }
+  `,
+  notion: `
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f7f6f3;
+      --text-primary: #37352f;
+      --text-secondary: #787774;
+      --accent: #2eaadc;
+      --border: #e8e7e4;
+      --code-bg: #f7f6f3;
+    }
+  `,
+  'opencode.ai': `
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f8fc;
+      --text-primary: #1e1e2e;
+      --text-secondary: #6e6e7e;
+      --accent: #6366f1;
+      --border: #e2e2e8;
+      --code-bg: #f8f8fc;
+    }
+  `,
+  spacex: `
+    :root {
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0a;
+      --text-primary: #f0f0fa;
+      --text-secondary: #a0a0b0;
+      --accent: #ffffff;
+      --border: #303030;
+      --code-bg: #0a0a0a;
+    }
+  `,
+  standard: `
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --text-primary: #333333;
+      --text-secondary: #666666;
+      --accent: #1890ff;
+      --border: #e0e0e0;
+      --code-bg: #f5f5f5;
+    }
+  `,
+  stripe: `
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f7fa;
+      --text-primary: #061b31;
+      --text-secondary: #64748d;
+      --accent: #533afd;
+      --border: #e5edf5;
+      --code-bg: #f5f7fa;
+    }
+  `,
+  vercel: `
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #fafafa;
+      --text-primary: #171717;
+      --text-secondary: #666666;
+      --accent: #000000;
+      --border: #ebebeb;
+      --code-bg: #fafafa;
+    }
+  `,
+  'vintage-newspaper': `
+    :root {
+      --bg-primary: #f5f2e8;
+      --bg-secondary: #ebe8de;
+      --text-primary: #2b2b2b;
+      --text-secondary: #666666;
+      --accent: #8b4513;
+      --border: #c9c2b0;
+      --code-bg: #ebe8de;
     }
   `,
 };
 
 export function generateHtml(config: HtmlArticleConfig): string {
-  const { title, content, summary, category, tags, createdAt, theme = 'tech' } = config;
+  const { title, content, summary, category, tags, createdAt, theme = 'standard' } = config;
   const htmlContent = marked(content) as string;
   const themeStyles = themes[theme];
 

@@ -33,18 +33,13 @@ program
   .option('-s, --style <style>', '写作风格 (professional|casual|academic)', 'professional')
   .option('-l, --length <length>', '文章长度 (short|medium|long)', 'medium')
   .option('--html', '同时生成 HTML 格式', false)
-  .option('--theme <theme>', 'HTML 主题 (tech|minimal|business)', 'tech')
+  .option('--theme <theme>', 'HTML 主题', 'standard')
   .option('--contents', '保存到 contents 目录', false)
   .action(async (options) => {
     const { topic, category, style, length, html, theme, contents } = options;
 
     if (!['tech', 'ai', 'invest'].includes(category)) {
       console.error('错误: 分类必须是 tech、ai 或 invest');
-      process.exit(1);
-    }
-
-    if (!['tech', 'minimal', 'business'].includes(theme)) {
-      console.error('错误: 主题必须是 tech、minimal 或 business');
       process.exit(1);
     }
 
@@ -100,7 +95,7 @@ program
   .description('将 Markdown 文件转换为 HTML')
   .requiredOption('-i, --input <file>', 'Markdown 文件路径')
   .option('-o, --output <dir>', '输出目录', CONTENTS_DIR)
-  .option('-t, --theme <theme>', 'HTML 主题 (tech|minimal|business)', 'tech')
+  .option('-t, --theme <theme>', 'HTML 主题', 'standard')
   .option('--title <title>', '文章标题（默认从文件读取）')
   .option('--open', '转换后自动在浏览器打开', false)
   .action((options) => {
@@ -108,11 +103,6 @@ program
 
     if (!fs.existsSync(input)) {
       console.error(`错误: 文件不存在 ${input}`);
-      process.exit(1);
-    }
-
-    if (!['tech', 'minimal', 'business'].includes(theme)) {
-      console.error('错误: 主题必须是 tech、minimal 或 business');
       process.exit(1);
     }
 
@@ -159,7 +149,7 @@ program
   .command('preview-md')
   .description('预览 Markdown 文件（渲染为 HTML）')
   .requiredOption('-i, --input <file>', 'Markdown 文件路径')
-  .option('-t, --theme <theme>', 'HTML 主题 (tech|minimal|business)', 'tech')
+  .option('-t, --theme <theme>', 'HTML 主题', 'standard')
   .option('-p, --port <port>', '预览服务器端口', '3100')
   .action((options) => {
     const { input, theme, port } = options;
@@ -232,7 +222,7 @@ program
   .description('转换为公众号格式 HTML')
   .requiredOption('-i, --input <file>', 'Markdown 文件路径')
   .option('-o, --output <file>', '输出文件路径')
-  .option('-t, --theme <theme>', '主题 (tech|business|minimal)', 'tech')
+  .option('-t, --theme <theme>', '主题', 'standard')
   .option('--title <title>', '文章标题')
   .option('--author <author>', '作者名称')
   .option('--copy', '生成可直接复制的内容（无 HTML/HEAD 标签）', false)
@@ -242,11 +232,6 @@ program
 
     if (!fs.existsSync(input)) {
       console.error(`错误: 文件不存在 ${input}`);
-      process.exit(1);
-    }
-
-    if (!['tech', 'business', 'minimal'].includes(theme)) {
-      console.error('错误: 主题必须是 tech、business 或 minimal');
       process.exit(1);
     }
 
@@ -301,7 +286,7 @@ program
   .option('--author <author>', '作者名称')
   .option('--digest <digest>', '摘要')
   .option('--thumb <file>', '封面图片路径')
-  .option('--theme <theme>', '主题 (tech|business|minimal)', 'tech')
+  .option('--theme <theme>', '主题', 'standard')
   .option('--publish', '直接发布（不保存为草稿）', false)
   .action(async (options) => {
     const { input, title, author, digest, thumb, theme, publish } = options;
