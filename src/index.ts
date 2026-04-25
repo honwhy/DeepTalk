@@ -38,11 +38,6 @@ program
   .action(async (options) => {
     const { topic, category, style, length, html, theme, contents } = options;
 
-    if (!['tech', 'ai', 'invest'].includes(category)) {
-      console.error('错误: 分类必须是 tech、ai 或 invest');
-      process.exit(1);
-    }
-
     console.log(`正在生成文章...`);
     console.log(`主题: ${topic}`);
     console.log(`分类: ${category}`);
