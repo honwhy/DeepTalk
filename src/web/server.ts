@@ -177,7 +177,7 @@ app.get('/api/wechat/:id', (req: Request, res: Response) => {
       if (root) {
         const style = root.getAttribute('style') || '';
         if (style) {
-          const newStyle = style.replace(/padding[^;]*;?/gi, '').replace(/;$/, '').replace(/^;/, '');
+          const newStyle = style//.replace(/padding[^;]*;?/gi, '').replace(/;$/, '').replace(/^;/, '');
           if (newStyle.trim()) {
             (root as any).setAttribute('style', newStyle.trim());
           } else {
