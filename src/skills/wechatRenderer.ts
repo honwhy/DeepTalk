@@ -138,6 +138,30 @@ const wechatThemes: Record<WeChatTheme, string> = {
       --quote-border: #6366f1;
     }
   `,
+  pinterest: `
+    :root {
+      --bg: #ffffff;
+      --text: #211922;
+      --text-light: #62625b;
+      --primary: #e60023;
+      --border: #e5e5e0;
+      --code-bg: #f6f6f3;
+      --quote-bg: #f0efe8;
+      --quote-border: #e60023;
+    }
+  `,
+  shopify: `
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --text-light: #a1a1aa;
+      --primary: #36f4a4;
+      --border: #1e2c31;
+      --code-bg: #061a1c;
+      --quote-bg: #0a1a1e;
+      --quote-border: #36f4a4;
+    }
+  `,
   spacex: `
     :root {
       --bg: #000000;

@@ -1,5 +1,5 @@
 // 通用 HTML 主题
-export type Theme = 'airbnb' | 'apple' | 'binance' | 'claude' | 'coinbase' | 'japanese-zen' | 'luxury-editorial' | 'mastercard' | 'neo-brutalist' | 'notion' | 'opencode.ai' | 'spacex' | 'standard' | 'stripe' | 'vercel' | 'vintage-newspaper';
+export type Theme = 'airbnb' | 'apple' | 'binance' | 'claude' | 'coinbase' | 'japanese-zen' | 'luxury-editorial' | 'mastercard' | 'neo-brutalist' | 'notion' | 'opencode.ai' | 'pinterest' | 'shopify' | 'spacex' | 'standard' | 'stripe' | 'vercel' | 'vintage-newspaper';
 
 export interface HtmlArticleConfig {
   title: string;
@@ -12,7 +12,7 @@ export interface HtmlArticleConfig {
 }
 
 // 公众号专用主题
-export type WeChatTheme = 'airbnb' | 'apple' | 'binance' | 'claude' | 'coinbase' | 'japanese-zen' | 'luxury-editorial' | 'mastercard' | 'neo-brutalist' | 'notion' | 'opencode.ai' | 'spacex' | 'standard' | 'stripe' | 'vercel' | 'vintage-newspaper';
+export type WeChatTheme = 'airbnb' | 'apple' | 'binance' | 'claude' | 'coinbase' | 'japanese-zen' | 'luxury-editorial' | 'mastercard' | 'neo-brutalist' | 'notion' | 'opencode.ai' | 'pinterest' | 'shopify' | 'spacex' | 'standard' | 'stripe' | 'vercel' | 'vintage-newspaper';
 
 export interface WeChatRenderOptions {
   theme?: WeChatTheme;

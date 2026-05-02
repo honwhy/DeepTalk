@@ -1,7 +1,7 @@
 export type Category = 'tech' | 'ai' | 'invest';
 
 export type TemplateType = 'tutorial' | 'analysis' | 'news' | 'story' | 'listicle' | 'review' | 'auto';
-export type ThemeType = 'airbnb' | 'apple' | 'binance' | 'claude' | 'coinbase' | 'japanese-zen' | 'luxury-editorial' | 'mastercard' | 'neo-brutalist' | 'notion' | 'opencode.ai' | 'spacex' | 'standard' | 'stripe' | 'vercel' | 'vintage-newspaper' | 'auto';
+export type ThemeType = 'airbnb' | 'apple' | 'binance' | 'claude' | 'coinbase' | 'japanese-zen' | 'luxury-editorial' | 'mastercard' | 'neo-brutalist' | 'notion' | 'opencode.ai' | 'pinterest' | 'shopify' | 'spacex' | 'standard' | 'stripe' | 'vercel' | 'vintage-newspaper' | 'auto';
 
 export interface ArticleConfig {
   topic: string;

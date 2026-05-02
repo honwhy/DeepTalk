@@ -17,6 +17,8 @@ Design System 设计系统规范
 | `neo-brutalist` | 原始粗野主义 | 高对比 + 强边框 |
 | `notion` | Notion | 暖白中性 + 负字间距 + 极简灰度 |
 | `opencode.ai` | 终端极客 | 深色背景 + 霓虹绿 + 等宽字体 |
+| `pinterest` | Pinterest | 暖色调 + 砂色中性 + 大圆角 + 灵感画板 |
+| `shopify` | Shopify | 暗色优先 + 超轻字重 + 霓虹绿强调 + 全圆角按钮 |
 | `spacex` | SpaceX | 深空黑 + 大写字母-spacing 工业风 |
 | `standard` | 通用标准 | 简洁商务 |
 | `stripe` | Stripe | 深海军蓝 + 蓝调阴影 + 轻字重 |
@@ -36,8 +38,8 @@ Design System 设计系统规范
 
 | 分类 | 主题 |
 |------|------|
-| 科技极客 | `apple`, `spacex`, `opencode.ai` |
+| 科技极客 | `apple`, `spacex`, `opencode.ai`, `shopify` |
 | 商业金融 | `binance`, `coinbase`, `stripe`, `standard` |
 | 极简主义 | `vercel`, `minimal` (alias), `notion` |
-| 温暖人文 | `airbnb`, `claude`, `mastercard`, `luxury-editorial` |
+| 温暖人文 | `airbnb`, `claude`, `mastercard`, `luxury-editorial`, `pinterest` |
 | 特色风格 | `neo-brutalist`, `japanese-zen`, `vintage-newspaper` |

@@ -2,7 +2,7 @@
 name: wechat-article
 description: |
   将 Markdown 内容转换为微信公众号兼容的 HTML 格式。
-  支持内联 CSS 样式、多种主题（airbnb/apple/binance/claude/coinbase/mastercard/notion/opencode.ai/spacex/stripe/vercel）、智能配图和代码高亮。
+  支持内联 CSS 样式、多种主题（airbnb/apple/binance/claude/coinbase/mastercard/notion/opencode.ai/pinterest/shopify/spacex/stripe/vercel）、智能配图和代码高亮。
   同时支持对现有 HTML 进行排版优化（统一样式 + 微信兼容性修复）。
   可自动分析内容选择合适的模板和主题，支持 Unsplash API 获取配图。
 allowed-tools:
@@ -27,7 +27,7 @@ metadata:
 - 内联 CSS 样式（公众号不支持 `<style>` 标签）
 - 基于 design-system 的专业排版样式
 - 代码高亮支持
-- 多种主题风格（airbnb/apple/binance/claude/coinbase/mastercard/notion/opencode.ai/spacex/stripe/vercel）
+- 多种主题风格（airbnb/apple/binance/claude/coinbase/mastercard/notion/opencode.ai/pinterest/shopify/spacex/stripe/vercel）
 
 ## Input
 

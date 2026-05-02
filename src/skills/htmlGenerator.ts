@@ -124,6 +124,28 @@ const themes: Record<Theme, string> = {
       --code-bg: #f8f8fc;
     }
   `,
+  pinterest: `
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f6f6f3;
+      --text-primary: #211922;
+      --text-secondary: #62625b;
+      --accent: #e60023;
+      --border: #e5e5e0;
+      --code-bg: #f6f6f3;
+    }
+  `,
+  shopify: `
+    :root {
+      --bg-primary: #000000;
+      --bg-secondary: #02090a;
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --accent: #36f4a4;
+      --border: #1e2c31;
+      --code-bg: #061a1c;
+    }
+  `,
   spacex: `
     :root {
       --bg-primary: #000000;

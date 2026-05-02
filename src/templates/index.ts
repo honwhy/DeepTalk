@@ -246,6 +246,8 @@ export function getAvailableThemes(): { value: Exclude<ThemeType, 'auto'>; label
     { value: 'neo-brutalist', label: 'Neo Brutalist' },
     { value: 'notion', label: 'Notion' },
     { value: 'opencode.ai', label: 'OpenCode AI' },
+    { value: 'pinterest', label: 'Pinterest' },
+    { value: 'shopify', label: 'Shopify' },
     { value: 'spacex', label: 'SpaceX' },
     { value: 'standard', label: 'Standard' },
     { value: 'stripe', label: 'Stripe' },
