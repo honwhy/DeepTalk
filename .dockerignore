@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.git/
+.gitignore
+.env
+.env.local
+output/
+contents/
+markdowns/
+vibe_images/
+nul
+*.log
+.DS_Store
+Thumbs.db
+.gitkeep
