@@ -112,7 +112,7 @@ app.get('/api/files/:id', (req: Request, res: Response) => {
 });
 
 // API 路由 - 获取公众号格式 HTML
-app.get('/api/wechat/:id', (req: Request, res: Response) => {
+app.get('/api/wechat/:id', async (req: Request, res: Response) => {
   const dir = (req.query.dir as string) || OUTPUT_DIR;
   const fileId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
   const theme = (req.query.theme as WeChatTheme) || 'standard';
@@ -143,7 +143,7 @@ app.get('/api/wechat/:id', (req: Request, res: Response) => {
       // HTML 文件：提取 body 内容并内联样式
       const html = fs.readFileSync(filepath, 'utf-8');
 
-      const { Window } = require('happy-dom') as any;
+      const { Window } = await import('happy-dom') as any;
       const win = new (Window as any)();
       const parser = new (win.DOMParser as any)();
       const doc = parser.parseFromString(html, 'text/html');
