@@ -1,6 +1,6 @@
 Design System 设计系统规范
 
-基于 16 个顶级科技公司/产品设计灵感的设计参考。
+基于 17 个顶级科技公司/产品设计灵感的设计参考。
 
 ## 主题列表
 
@@ -11,6 +11,7 @@ Design System 设计系统规范
 | `binance` | Binance | 深色加密 + 霓虹强调 + 粗体字 |
 | `claude` | Anthropic Claude | 羊皮纸暖色 + 衬线标题 + 陶土色 |
 | `coinbase` | Coinbase | 金融蓝白 + 轻字重 + 薄边框 |
+| `cursor` | Cursor | 暖色奶油 + 橙色主调 + 杂志编辑风 |
 | `japanese-zen` | 日式侘寂 | 极简禅意 + 柔和色调 |
 | `luxury-editorial` | 奢侈品牌 | 优雅排版 + 精致留白 |
 | `mastercard` | Mastercard | 暖白中性 + 负字间距 + 极细边框 |
@@ -38,7 +39,7 @@ Design System 设计系统规范
 
 | 分类 | 主题 |
 |------|------|
-| 科技极客 | `apple`, `spacex`, `opencode.ai`, `shopify` |
+| 科技极客 | `apple`, `spacex`, `opencode.ai`, `shopify`, `cursor` |
 | 商业金融 | `binance`, `coinbase`, `stripe`, `standard` |
 | 极简主义 | `vercel`, `minimal` (alias), `notion` |
 | 温暖人文 | `airbnb`, `claude`, `mastercard`, `luxury-editorial`, `pinterest` |
