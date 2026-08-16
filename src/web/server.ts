@@ -19,7 +19,7 @@ interface PreviewOptions {
 const app = express();
 app.use(express.json());
 
-// 获取文件列表
+// 获取文件列表（递归支持子目录）
 function getFileList(dir: string): Array<{
   id: string;
   title: string;
@@ -31,40 +31,64 @@ function getFileList(dir: string): Array<{
     return [];
   }
 
-  const files = fs.readdirSync(dir).filter(f => f.endsWith('.html') || f.endsWith('.md'));
-  return files.map(file => {
-    const filepath = path.join(dir, file);
-    const ext = path.extname(file);
-    let title = file.replace(ext, '');
+  const results: ReturnType<typeof getFileList> = [];
 
-    if (ext === '.html') {
-      try {
-        const content = fs.readFileSync(filepath, 'utf-8');
-        const titleMatch = content.match(/<h1>([^<]+)<\/h1>/);
-        if (titleMatch) title = titleMatch[1];
-      } catch (e) {
-        // ignore
+  function walk(currentDir: string) {
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    for (const entry of entries) {
+      const filepath = path.join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        walk(filepath);
+        continue;
       }
-    } else if (ext === '.md') {
-      try {
-        const content = fs.readFileSync(filepath, 'utf-8');
-        const titleMatch = content.match(/^#\s+(.+)$/m);
-        if (titleMatch) title = titleMatch[1];
-      } catch (e) {
-        // ignore
+      const ext = path.extname(entry.name);
+      if (ext !== '.html' && ext !== '.md') continue;
+
+      let title = entry.name.replace(ext, '');
+      if (ext === '.html') {
+        try {
+          const content = fs.readFileSync(filepath, 'utf-8');
+          const titleMatch = content.match(/<h1>([^<]+)<\/h1>/);
+          if (titleMatch) title = titleMatch[1];
+        } catch (e) {
+          // ignore
+        }
+      } else if (ext === '.md') {
+        try {
+          const content = fs.readFileSync(filepath, 'utf-8');
+          const titleMatch = content.match(/^#\s+(.+)$/m);
+          if (titleMatch) title = titleMatch[1];
+        } catch (e) {
+          // ignore
+        }
       }
+
+      const stats = fs.statSync(filepath);
+      const id = path.relative(dir, filepath).split(path.sep).join('/');
+
+      results.push({
+        id,
+        title,
+        type: ext.replace('.', ''),
+        createdAt: stats.mtime.toISOString(),
+        filepath: `/api/files/${id}`,
+      });
     }
+  }
 
-    const stats = fs.statSync(filepath);
+  walk(dir);
+  return results.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+}
 
-    return {
-      id: file,
-      title,
-      type: ext.replace('.', ''),
-      createdAt: stats.mtime.toISOString(),
-      filepath: `/api/files/${file}`,
-    };
-  }).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+// 将请求中的文件 id（可为多层路径）安全解析为目录内的绝对路径，越界返回 null
+function resolveFileInDir(dir: string, fileId: string | string[]): string | null {
+  const rel = Array.isArray(fileId) ? fileId.join('/') : fileId;
+  const resolved = path.resolve(dir, rel);
+  const root = path.resolve(dir);
+  if (resolved !== root && !resolved.startsWith(root + path.sep)) {
+    return null;
+  }
+  return resolved;
 }
 
 // API 路由 - 获取文件列表
@@ -74,18 +98,17 @@ app.get('/api/files', (req: Request, res: Response) => {
   res.json(files);
 });
 
-// API 路由 - 获取单个文件
-app.get('/api/files/:id', (req: Request, res: Response) => {
+// API 路由 - 获取单个文件（支持多层目录，如 /api/files/ai/orama.md）
+app.get('/api/files/*file', (req: Request, res: Response) => {
   const dir = (req.query.dir as string) || OUTPUT_DIR;
-  const fileId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-  const filepath = path.join(dir, fileId);
+  const filepath = resolveFileInDir(dir, req.params.file);
 
-  if (!fs.existsSync(filepath)) {
+  if (!filepath || !fs.existsSync(filepath)) {
     res.status(404).json({ error: '文件不存在' });
     return;
   }
 
-  const ext = path.extname(fileId);
+  const ext = path.extname(filepath);
 
   if (ext === '.html') {
     res.sendFile(filepath);
@@ -93,7 +116,7 @@ app.get('/api/files/:id', (req: Request, res: Response) => {
     const theme = (req.query.theme as Theme) || 'standard';
     const content = fs.readFileSync(filepath, 'utf-8');
     const titleMatch = content.match(/^#\s+(.+)$/m);
-    const title = titleMatch ? titleMatch[1] : fileId;
+    const title = titleMatch ? titleMatch[1] : path.basename(filepath);
 
     const html = generateHtml({
       title,
@@ -111,19 +134,18 @@ app.get('/api/files/:id', (req: Request, res: Response) => {
   }
 });
 
-// API 路由 - 获取公众号格式 HTML
-app.get('/api/wechat/:id', async (req: Request, res: Response) => {
+// API 路由 - 获取公众号格式 HTML（支持多层目录）
+app.get('/api/wechat/*file', async (req: Request, res: Response) => {
   const dir = (req.query.dir as string) || OUTPUT_DIR;
-  const fileId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+  const filepath = resolveFileInDir(dir, req.params.file);
   const theme = (req.query.theme as WeChatTheme) || 'standard';
-  const filepath = path.join(dir, fileId);
 
-  if (!fs.existsSync(filepath)) {
+  if (!filepath || !fs.existsSync(filepath)) {
     res.status(404).json({ error: '文件不存在' });
     return;
   }
 
-  const ext = path.extname(fileId);
+  const ext = path.extname(filepath);
   if (ext !== '.md' && ext !== '.html') {
     res.status(400).json({ error: '不支持的文件类型' });
     return;
@@ -137,7 +159,7 @@ app.get('/api/wechat/:id', async (req: Request, res: Response) => {
       // Markdown 文件：使用 renderForWeChatCopy 渲染
       const markdown = fs.readFileSync(filepath, 'utf-8');
       const titleMatch = markdown.match(/^#\s+(.+)$/m);
-      title = titleMatch ? titleMatch[1] : fileId.replace('.md', '');
+      title = titleMatch ? titleMatch[1] : path.basename(filepath).replace('.md', '');
       wechatHtml = renderForWeChatCopy(markdown, { theme, title });
     } else {
       // HTML 文件：提取 body 内容并内联样式
@@ -150,7 +172,7 @@ app.get('/api/wechat/:id', async (req: Request, res: Response) => {
 
       const h1 = doc.querySelector('h1');
       const docTitle = doc.querySelector('title');
-      title = (h1 ? h1.textContent : null) || (docTitle ? docTitle.textContent : null) || fileId.replace('.html', '');
+      title = (h1 ? h1.textContent : null) || (docTitle ? docTitle.textContent : null) || path.basename(filepath).replace('.html', '');
 
       const body = doc.body;
       let content = body.innerHTML.replace(/<div(\s|>)/gi, '<section$1').replace(/<\/div>/gi, '</section>');
@@ -445,10 +467,9 @@ export function startPreviewServer(
       res.json(getFileList(targetDir));
     });
 
-    server.get('/api/files/:id', (req: Request, res: Response) => {
-      const fileId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-      const filepath = path.join(targetDir, fileId);
-      if (!fs.existsSync(filepath)) {
+    server.get('/api/files/*file', (req: Request, res: Response) => {
+      const filepath = resolveFileInDir(targetDir, req.params.file);
+      if (!filepath || !fs.existsSync(filepath)) {
         res.status(404).send('文件不存在');
         return;
       }
